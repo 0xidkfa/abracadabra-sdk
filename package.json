@@ -1,0 +1,11 @@
+{
+  "name": "abracadabra-sdk",
+  "version": "1.0.0",
+  "description": "SDK to interact with Abracadabra smart contracts.",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "",
+  "license": "ISC"
+}
