@@ -3,6 +3,7 @@ import { ChainOptions } from '../util/interfaces';
 export const DEFAULT_CHAIN_OPTIONS: ChainOptions = {
   eth: {
     name: 'Ethereum',
+    chainId: 1,
     mimToken: '0x99d8a9c45b2eca8864373a26d1459e3dff1e17f3',
     bentobox: '',
     degenbox: '',

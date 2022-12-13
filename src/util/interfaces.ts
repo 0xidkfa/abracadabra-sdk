@@ -11,6 +11,7 @@ export type ChainOptions = {
 };
 
 export interface ChainConfig {
+  chainId: number;
   name: string;
   mimToken: string;
   bentobox?: string;

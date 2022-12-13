@@ -20,6 +20,7 @@
     "@types/mocha": "^10.0.1",
     "@types/underscore": "^1.11.4",
     "chai": "^4.3.7",
-    "mocha": "^10.2.0"
+    "mocha": "^10.2.0",
+    "nock": "^13.2.9"
   }
 }

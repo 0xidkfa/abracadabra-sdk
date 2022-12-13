@@ -1,0 +1,98 @@
+[
+    {
+        "scope": "https://virginia.rpc.blxrbdn.com:443",
+        "method": "POST",
+        "path": "/",
+        "body": {
+            "method": "eth_chainId",
+            "params": [],
+            "id": 42,
+            "jsonrpc": "2.0"
+        },
+        "status": 200,
+        "response": {
+            "jsonrpc": "2.0",
+            "id": 42,
+            "result": "0x1"
+        },
+        "rawHeaders": [
+            "Date",
+            "Tue, 13 Dec 2022 20:56:39 GMT",
+            "Content-Type",
+            "application/json",
+            "Content-Length",
+            "41",
+            "Connection",
+            "close",
+            "Vary",
+            "Origin"
+        ],
+        "responseIsBinary": false
+    },
+    {
+        "scope": "https://virginia.rpc.blxrbdn.com:443",
+        "method": "POST",
+        "path": "/",
+        "body": {
+            "method": "eth_chainId",
+            "params": [],
+            "id": 43,
+            "jsonrpc": "2.0"
+        },
+        "status": 200,
+        "response": {
+            "jsonrpc": "2.0",
+            "id": 43,
+            "result": "0x1"
+        },
+        "rawHeaders": [
+            "Date",
+            "Tue, 13 Dec 2022 20:56:39 GMT",
+            "Content-Type",
+            "application/json",
+            "Content-Length",
+            "41",
+            "Connection",
+            "close",
+            "Vary",
+            "Origin"
+        ],
+        "responseIsBinary": false
+    },
+    {
+        "scope": "https://virginia.rpc.blxrbdn.com:443",
+        "method": "POST",
+        "path": "/",
+        "body": {
+            "method": "eth_call",
+            "params": [
+                {
+                    "to": "0xc6b2b3fe7c3d7a6f823d9106e22e66660709001e",
+                    "data": "0xaba024f4"
+                },
+                "latest"
+            ],
+            "id": 44,
+            "jsonrpc": "2.0"
+        },
+        "status": 200,
+        "response": {
+            "jsonrpc": "2.0",
+            "id": 44,
+            "result": "0x0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "rawHeaders": [
+            "Date",
+            "Tue, 13 Dec 2022 20:56:40 GMT",
+            "Content-Type",
+            "application/json",
+            "Content-Length",
+            "104",
+            "Connection",
+            "close",
+            "Vary",
+            "Origin"
+        ],
+        "responseIsBinary": false
+    }
+]
