@@ -1,15 +1,14 @@
 import { assert } from 'chai';
-import { Cauldron } from '../src/contracts/Cauldron';
 import { BigNumber, ethers, Signer, Wallet } from 'ethers';
+import { BentoBox, Cauldron, Oracle, Token } from '../src/contracts/index';
 import nock from 'nock';
-import { BentoBox } from '../src/contracts/BentoBox';
 // import { nockBack } from './testHelper';
 
 describe('Cauldron', () => {
   var cauldron: Cauldron;
 
   beforeEach(function () {
-    nock.back.fixtures = __dirname + '/fixtures/';
+    nock.back.fixtures = __dirname + '/fixtures/cauldron';
     nock.back.setMode('record');
 
     cauldron = new Cauldron({
@@ -71,6 +70,135 @@ describe('Cauldron', () => {
       let response = await cauldron.bentoBox();
       assert.instanceOf(response, BentoBox);
       assert.equal(response.contractAddress, '0xd96f48665a1410C0cd669A88898ecA36B9Fc2cce');
+      nockDone();
+    });
+  });
+
+  describe('#collateral', async () => {
+    it('returns an instance of Token', async () => {
+      const { nockDone, context } = await nock.back('collateral.json');
+      let response = await cauldron.collateral();
+      assert.instanceOf(response, Token);
+      assert.equal(response.contractAddress, '0x38EA452219524Bb87e18dE1C24D3bB59510BD783');
+      nockDone();
+    });
+  });
+
+  describe('#exchangeRate', async () => {
+    it('returns the last fetched exchange rate', async () => {
+      const { nockDone, context } = await nock.back('exchangeRate.json');
+      let response = await cauldron.exchangeRate();
+      assert.deepEqual(response, BigNumber.from('998864'));
+      nockDone();
+    });
+  });
+
+  describe('#feeTo', async () => {
+    it('returns the feeTo address', async () => {
+      const { nockDone, context } = await nock.back('feeTo.json');
+      let response = await cauldron.feeTo();
+      assert.deepEqual(response, '0x0000000000000000000000000000000000000000');
+      nockDone();
+    });
+  });
+
+  describe('#magicInternetMoney', async () => {
+    it('returns the magicInternetMoney address', async () => {
+      const { nockDone, context } = await nock.back('magicInternetMoney.json');
+      let response = await cauldron.magicInternetMoney();
+      assert.deepEqual(response, '0x99D8a9C45b2ecA8864373A26D1459e3Dff1e17F3');
+      nockDone();
+    });
+  });
+
+  describe('#masterContract', async () => {
+    it('returns the masterContract address', async () => {
+      const { nockDone, context } = await nock.back('masterContract.json');
+      let response = await cauldron.masterContract();
+      assert.deepEqual(response, '0x3E2a2BC69E5C22A8DA4056B413621D1820Eb493E');
+      nockDone();
+    });
+  });
+
+  describe('#oracle', async () => {
+    it('returns an instance of oracle', async () => {
+      const { nockDone, context } = await nock.back('oracle.json');
+      let response = await cauldron.oracle();
+      assert.instanceOf(response, Oracle);
+      assert.equal(response.contractAddress, '0xaBB326cD92b0e48fa6dfC54d69Cd1750a1007a97');
+      nockDone();
+    });
+  });
+
+  describe('#oracleData', async () => {
+    it('returns oracleData bytes', async () => {
+      const { nockDone, context } = await nock.back('oracleData.json');
+      let response = await cauldron.oracleData();
+      assert.equal(response, '0x0000000000000000000000000000000000000000');
+      nockDone();
+    });
+  });
+
+  describe('#owner', async () => {
+    it('returns the owner address', async () => {
+      const { nockDone, context } = await nock.back('owner.json');
+      let response = await cauldron.owner();
+      assert.deepEqual(response, '0x0000000000000000000000000000000000000000');
+      nockDone();
+    });
+  });
+
+  describe('#pendingOwner', async () => {
+    it('returns the pendingOwner address', async () => {
+      const { nockDone, context } = await nock.back('pendingOwner.json');
+      let response = await cauldron.pendingOwner();
+      assert.deepEqual(response, '0x0000000000000000000000000000000000000000');
+      nockDone();
+    });
+  });
+
+  describe('#totalBorrow', async () => {
+    it('returns an object representing total borrow', async () => {
+      const { nockDone, context } = await nock.back('totalBorrow.json');
+      let response = await cauldron.totalBorrow();
+      assert.deepEqual(response.elastic, BigNumber.from('7742595332194081559348956'));
+      assert.deepEqual(response.base, BigNumber.from('7733061042712652778617385'));
+      nockDone();
+    });
+  });
+
+  describe('#totalCollateralShare', async () => {
+    it('returns an object representing total collateral share', async () => {
+      const { nockDone, context } = await nock.back('totalCollateralShare.json');
+      let response = await cauldron.totalCollateralShare();
+      assert.deepEqual(response, BigNumber.from('8152159425520'));
+      nockDone();
+    });
+  });
+
+  describe('#userBorrowPart', async () => {
+    it('returns an object representing a user borrow part', async () => {
+      const { nockDone, context } = await nock.back('userBorrowPart.json');
+      let response = await cauldron.userBorrowPart('0x99459a327e2e1f7535501aff6a1aada7024c45fd');
+      assert.deepEqual(response, BigNumber.from('1994617604729843600000000'));
+      nockDone();
+    });
+  });
+
+  describe('#userCollateralShare', async () => {
+    it('returns an object representing the collateral share of a user', async () => {
+      const { nockDone, context } = await nock.back('userBorrowShare.json');
+      let response = await cauldron.userCollateralShare('0x99459a327e2e1f7535501aff6a1aada7024c45fd');
+      assert.deepEqual(response, BigNumber.from('2154198222280'));
+      nockDone();
+    });
+  });
+
+  describe('#userBorrow', async () => {
+    it('returns an object representing a user borrow', async () => {
+      const { nockDone, context } = await nock.back('userBorrow.json');
+      let response = await cauldron.userBorrow('0x99459a327e2e1f7535501aff6a1aada7024c45fd');
+      assert.deepEqual(response.toString(), '1994617604729843600000000');
       nockDone();
     });
   });

@@ -1,8 +1,8 @@
-import bentoBoxAbi from './abis/bentoBoxAbi.json';
+import erc20Abi from './abis/erc20Abi.json';
 import { ContractClient } from './ContractClient';
 import { BigNumber, Contract, ethers, Signer, Wallet } from 'ethers';
 
-export class BentoBox extends ContractClient {
+export class Token extends ContractClient {
   contract: Contract;
 
   public constructor(
@@ -17,10 +17,10 @@ export class BentoBox extends ContractClient {
     if (!this.contractAddress) {
       throw new Error('contractAddress not provided - unable to execute message');
     }
-    this.contract = new Contract(this.contractAddress, bentoBoxAbi, this.provider);
+    this.contract = new Contract(this.contractAddress, erc20Abi, this.provider);
   }
 
-  public async toAmount(token: string, share: BigNumber, roundUp: boolean): Promise<BigNumber> {
-    return await this.contract.toAmount(token, share, roundUp);
+  public async decimals(): Promise<number> {
+    return await this.contract.decimals();
   }
 }

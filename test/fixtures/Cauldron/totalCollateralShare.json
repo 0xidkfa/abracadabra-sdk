@@ -17,7 +17,7 @@
         },
         "rawHeaders": [
             "Date",
-            "Tue, 13 Dec 2022 21:03:57 GMT",
+            "Tue, 13 Dec 2022 21:50:59 GMT",
             "Content-Type",
             "application/json",
             "Content-Length",
@@ -47,7 +47,7 @@
         },
         "rawHeaders": [
             "Date",
-            "Tue, 13 Dec 2022 21:03:57 GMT",
+            "Tue, 13 Dec 2022 21:50:59 GMT",
             "Content-Type",
             "application/json",
             "Content-Length",
@@ -68,7 +68,7 @@
             "params": [
                 {
                     "to": "0xc6b2b3fe7c3d7a6f823d9106e22e66660709001e",
-                    "data": "0xb27c0e74"
+                    "data": "0x473e3ce7"
                 },
                 "latest"
             ],
@@ -79,15 +79,15 @@
         "response": {
             "jsonrpc": "2.0",
             "id": 44,
-            "result": "0x00000000000000000000000000000000000000000000000000000000638e59d700000000000000000000000000000000000000000000030c3c78634ca6908abb0000000000000000000000000000000000000000000000000000000012e687c0"
+            "result": "0x0000000000000000000000000000000000000000000000000000076a129113f0"
         },
         "rawHeaders": [
             "Date",
-            "Tue, 13 Dec 2022 21:03:57 GMT",
+            "Tue, 13 Dec 2022 21:51:00 GMT",
             "Content-Type",
             "application/json",
             "Content-Length",
-            "232",
+            "104",
             "Connection",
             "close",
             "Vary",

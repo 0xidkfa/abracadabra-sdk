@@ -2,7 +2,7 @@ import cauldronAbi from './abis/cauldronAbi.json';
 import { ContractClient } from './ContractClient';
 import { BigNumber, Contract, ethers, Signer, Wallet } from 'ethers';
 import { SECONDS_PER_YEAR } from '../util/constants';
-import { BentoBox } from './BentoBox';
+import { BentoBox, Oracle, Token } from './index';
 
 export class Cauldron extends ContractClient {
   contract: Contract;
@@ -53,5 +53,76 @@ export class Cauldron extends ContractClient {
       provider: this.provider,
       signer: this.signer,
     });
+  }
+
+  // TODO: #borrowLimit
+
+  public async collateral(): Promise<Token> {
+    return new Token({
+      contractAddress: await this.contract.collateral(),
+      provider: this.provider,
+      signer: this.signer,
+    });
+  }
+
+  public async exchangeRate(): Promise<BigNumber> {
+    return await this.contract.exchangeRate();
+  }
+
+  public async feeTo(): Promise<string> {
+    return await this.contract.feeTo();
+  }
+
+  public async magicInternetMoney(): Promise<string> {
+    return await this.contract.magicInternetMoney();
+  }
+
+  public async masterContract(): Promise<string> {
+    return await this.contract.masterContract();
+  }
+
+  public async oracle(): Promise<Oracle> {
+    return new Oracle({
+      contractAddress: await this.contract.oracle(),
+      provider: this.provider,
+      signer: this.signer,
+    });
+  }
+
+  public async oracleData(): Promise<string> {
+    return await this.contract.oracleData();
+  }
+
+  public async owner(): Promise<string> {
+    return await this.contract.owner();
+  }
+
+  public async pendingOwner(): Promise<string> {
+    return await this.contract.pendingOwner();
+  }
+
+  public async totalBorrow(): Promise<{ elastic: BigNumber; base: BigNumber }> {
+    // Base is the borrow amount that is displayed on the website
+    // Elastic is what users actually owe given interest
+    return await this.contract.totalBorrow();
+  }
+
+  public async totalCollateralShare(): Promise<BigNumber> {
+    return await this.contract.totalCollateralShare();
+  }
+
+  public async userBorrowPart(address: string): Promise<BigNumber> {
+    return await this.contract.userBorrowPart(address);
+  }
+
+  public async userCollateralShare(address: string): Promise<BigNumber> {
+    return await this.contract.userCollateralShare(address);
+  }
+
+  public async userBorrow(address: string): Promise<BigNumber> {
+    let totalBorrow = await this.totalBorrow();
+    let userBorrowPart = await this.userBorrowPart(address);
+    // Parts != 1 MIM. To convert to MIM, take elastic / base and multiply by userBorrowPart
+    return totalBorrow.elastic.div(totalBorrow.base).mul(userBorrowPart);
   }
 }
