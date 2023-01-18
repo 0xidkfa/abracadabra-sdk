@@ -4,6 +4,7 @@ import { SECONDS_PER_YEAR } from '../util/constants';
 import { Vault, Oracle, Token } from './index';
 import { ActionBase } from '../models/cookActions/ActionBase';
 import { map } from 'underscore';
+import { ChainConfig } from '../util/interfaces';
 
 export class Cauldron extends ContractBase {
   contract: Contract;
@@ -16,7 +17,7 @@ export class Cauldron extends ContractBase {
     options: Partial<{
       contractAddress: string;
       abi: ContractInterface;
-      chainId: number;
+      chain: ChainConfig;
       provider: ethers.providers.BaseProvider;
       signer: ethers.Signer;
     }>
@@ -27,7 +28,7 @@ export class Cauldron extends ContractBase {
       throw new Error('contractAddress not provided - unable to execute message');
     }
     this.contract = new Contract(this.contractAddress, this.abi, this.provider);
-    this.chainId = options.chainId as number;
+    this.chainId = options.chain?.chainId as number;
   }
 
   public async borrowOpeningFee(): Promise<BigNumber> {

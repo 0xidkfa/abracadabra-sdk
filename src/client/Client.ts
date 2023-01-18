@@ -4,6 +4,7 @@ import { ChainOptions, MarketConfig, ChainConfig, Chain } from '../util/interfac
 import { DEFAULT_CHAIN_OPTIONS } from '../configs/defaultConfig';
 import { Cauldron } from '../contracts/Cauldron';
 import _ = require('underscore');
+import { Market } from '../models';
 
 export interface ClientConfig {
   provider: ethers.providers.BaseProvider;
@@ -15,13 +16,7 @@ export class Client {
   provider?: ethers.providers.BaseProvider;
   signer?: ethers.Signer;
   markets: {
-    [symbol: string]: {
-      name: string;
-      cauldron: Cauldron;
-      oracle: string;
-      liquidationSwapper: string;
-      leverageSwapper: string;
-    };
+    [symbol: string]: Market;
   };
 
   constructor(chain: Chain, options: Partial<ClientConfig> = {}) {
@@ -40,19 +35,11 @@ export class Client {
         let marketSymbol = keyval[0];
         let market = keyval[1];
 
-        this.markets[marketSymbol] = {
-          name: market.name,
-          cauldron: new Cauldron({
-            contractAddress: market.cauldron.address,
-            abi: market.cauldron.abi,
-            chainId: clientOptions.chainId,
-            provider: this.provider,
-            signer: this.signer,
-          }),
-          oracle: market.oracle,
-          liquidationSwapper: market.liquidationSwapper,
-          leverageSwapper: market.leverageSwapper,
-        };
+        this.markets[marketSymbol] = new Market({
+          provider: this.provider,
+          signer: this.signer,
+          market: market,
+        });
       });
   }
 }

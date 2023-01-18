@@ -2,11 +2,13 @@ import oracleAbi from '../contracts/abis/oracleAbi.json';
 import { ContractBase } from '../contracts/ContractBase';
 import { BigNumber, Contract, ethers, Signer, Wallet, utils } from 'ethers';
 import { bnToFloat, expandDecimals } from '../util/helpers';
-import { MarketConfig } from '../util/interfaces';
+import { ChainConfig, MarketConfig } from '../util/interfaces';
 import { Cauldron, Oracle, Vault, Token } from '../contracts';
 
 export class Market {
   cauldron: Cauldron;
+  marketConfig: MarketConfig;
+  chainConfig: ChainConfig;
   // leverageSwapper: string;
   // liquidationSwapper: string;
   // strategy?: string;
@@ -16,12 +18,14 @@ export class Market {
       provider: ethers.providers.BaseProvider;
       signer: ethers.Signer;
       market: MarketConfig;
-      chainId: number;
+      chain: ChainConfig; // NEED TO CREATE CONCEPT OF CHAIN TO GET COMMON CHAIN CONFIG, LIKE MIM TOKEN...
     }>
   ) {
+    this.marketConfig = options.market!;
+    this.chainConfig = options.chain!;
     this.cauldron = new Cauldron({
       contractAddress: options.market?.cauldron.address,
-      chainId: options.chainId,
+      chain: options.chain,
       abi: options.market?.cauldron.abi,
       provider: options.provider,
     });
@@ -44,6 +48,13 @@ export class Market {
 
   public async collateral(): Promise<Token> {
     return await this.cauldron.collateral();
+  }
+
+  async getMaxBorrow(): Promise<BigNumber> {
+    let bentoBox = await this.bentoBox();
+    const poolBalance = await bentoBox.balanceOf(this.chainConfig.mimToken, this.cauldron.contractAddress);
+    const toAmount = await bentoBox.toAmount(this.chainConfig.mimToken, poolBalance, false);
+    return toAmount;
   }
 
   public async totalMimBorrowed() {

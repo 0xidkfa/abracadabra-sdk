@@ -20,11 +20,15 @@ export class Vault extends ContractBase {
     this.contract = new Contract(this.contractAddress, vaultAbi, this.provider);
   }
 
-  public async toAmount(token: string, share: BigNumber, roundUp: boolean): Promise<BigNumber> {
-    return await this.contract.toAmount(token, share, roundUp);
+  public async toAmount(tokenAddress: string, share: BigNumber, roundUp: boolean): Promise<BigNumber> {
+    return await this.contract.toAmount(tokenAddress, share, roundUp);
   }
 
-  public async nonces(address: string): Promise<BigNumber> {
-    return await this.contract.nonces(address);
+  public async nonces(walletAddress: string): Promise<BigNumber> {
+    return await this.contract.nonces(walletAddress);
+  }
+
+  public async balanceOf(tokenAddress: string, marketAddress: string) {
+    return await this.contract.balanceOf(tokenAddress, marketAddress);
   }
 }
