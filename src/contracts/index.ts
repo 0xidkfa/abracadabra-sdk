@@ -1,5 +1,5 @@
-export * from './BentoBox';
+export * from './Vault';
 export * from './Cauldron';
 export * from './Oracle';
 export * from './Token';
-export * from './Market';
+export * from './MasterContract';

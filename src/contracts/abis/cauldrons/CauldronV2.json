@@ -1,15 +1,30 @@
 [
   {
     "inputs": [
-      { "internalType": "contract IBentoBoxV1", "name": "bentoBox_", "type": "address" },
-      { "internalType": "contract IERC20", "name": "magicInternetMoney_", "type": "address" }
+      {
+        "internalType": "contract IBentoBoxV1",
+        "name": "bentoBox_",
+        "type": "address"
+      },
+      {
+        "internalType": "contract IERC20",
+        "name": "magicInternetMoney_",
+        "type": "address"
+      }
     ],
     "stateMutability": "nonpayable",
     "type": "constructor"
   },
   {
     "anonymous": false,
-    "inputs": [{ "indexed": false, "internalType": "uint128", "name": "accruedAmount", "type": "uint128" }],
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint128",
+        "name": "accruedAmount",
+        "type": "uint128"
+      }
+    ],
     "name": "LogAccrue",
     "type": "event"
   },
@@ -18,7 +33,12 @@
     "inputs": [
       { "indexed": true, "internalType": "address", "name": "from", "type": "address" },
       { "indexed": true, "internalType": "address", "name": "to", "type": "address" },
-      { "indexed": false, "internalType": "uint256", "name": "share", "type": "uint256" }
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "share",
+        "type": "uint256"
+      }
     ],
     "name": "LogAddCollateral",
     "type": "event"
@@ -28,21 +48,45 @@
     "inputs": [
       { "indexed": true, "internalType": "address", "name": "from", "type": "address" },
       { "indexed": true, "internalType": "address", "name": "to", "type": "address" },
-      { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" },
-      { "indexed": false, "internalType": "uint256", "name": "part", "type": "uint256" }
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "part",
+        "type": "uint256"
+      }
     ],
     "name": "LogBorrow",
     "type": "event"
   },
   {
     "anonymous": false,
-    "inputs": [{ "indexed": false, "internalType": "uint256", "name": "rate", "type": "uint256" }],
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "rate",
+        "type": "uint256"
+      }
+    ],
     "name": "LogExchangeRate",
     "type": "event"
   },
   {
     "anonymous": false,
-    "inputs": [{ "indexed": true, "internalType": "address", "name": "newFeeTo", "type": "address" }],
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newFeeTo",
+        "type": "address"
+      }
+    ],
     "name": "LogFeeTo",
     "type": "event"
   },
@@ -51,7 +95,12 @@
     "inputs": [
       { "indexed": true, "internalType": "address", "name": "from", "type": "address" },
       { "indexed": true, "internalType": "address", "name": "to", "type": "address" },
-      { "indexed": false, "internalType": "uint256", "name": "share", "type": "uint256" }
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "share",
+        "type": "uint256"
+      }
     ],
     "name": "LogRemoveCollateral",
     "type": "event"
@@ -61,8 +110,18 @@
     "inputs": [
       { "indexed": true, "internalType": "address", "name": "from", "type": "address" },
       { "indexed": true, "internalType": "address", "name": "to", "type": "address" },
-      { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" },
-      { "indexed": false, "internalType": "uint256", "name": "part", "type": "uint256" }
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "part",
+        "type": "uint256"
+      }
     ],
     "name": "LogRepay",
     "type": "event"
@@ -70,8 +129,18 @@
   {
     "anonymous": false,
     "inputs": [
-      { "indexed": true, "internalType": "address", "name": "feeTo", "type": "address" },
-      { "indexed": false, "internalType": "uint256", "name": "feesEarnedFraction", "type": "uint256" }
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "feeTo",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "feesEarnedFraction",
+        "type": "uint256"
+      }
     ],
     "name": "LogWithdrawFees",
     "type": "event"
@@ -79,8 +148,18 @@
   {
     "anonymous": false,
     "inputs": [
-      { "indexed": true, "internalType": "address", "name": "previousOwner", "type": "address" },
-      { "indexed": true, "internalType": "address", "name": "newOwner", "type": "address" }
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
     ],
     "name": "OwnershipTransferred",
     "type": "event"
@@ -106,7 +185,13 @@
     "stateMutability": "view",
     "type": "function"
   },
-  { "inputs": [], "name": "accrue", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+  {
+    "inputs": [],
+    "name": "accrue",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
   {
     "inputs": [],
     "name": "accrueInfo",
@@ -149,7 +234,13 @@
     "stateMutability": "nonpayable",
     "type": "function"
   },
-  { "inputs": [], "name": "claimOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+  {
+    "inputs": [],
+    "name": "claimOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
   {
     "inputs": [],
     "name": "collateral",
@@ -214,7 +305,7 @@
   {
     "inputs": [],
     "name": "masterContract",
-    "outputs": [{ "internalType": "contract CauldronV2Multichain", "name": "", "type": "address" }],
+    "outputs": [{ "internalType": "contract CauldronV2", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -333,5 +424,11 @@
     "stateMutability": "view",
     "type": "function"
   },
-  { "inputs": [], "name": "withdrawFees", "outputs": [], "stateMutability": "nonpayable", "type": "function" }
+  {
+    "inputs": [],
+    "name": "withdrawFees",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
 ]

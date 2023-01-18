@@ -1,15 +1,22 @@
-import cauldronAbi from './abis/cauldronAbi.json';
-import { ContractClient } from './ContractClient';
-import { BigNumber, Contract, ethers, Signer, Wallet } from 'ethers';
+import { ContractBase } from './ContractBase';
+import { BigNumber, Contract, ethers, Signer, ContractInterface } from 'ethers';
 import { SECONDS_PER_YEAR } from '../util/constants';
-import { BentoBox, Oracle, Token } from './index';
+import { Vault, Oracle, Token } from './index';
+import { ActionBase } from '../models/cookActions/ActionBase';
+import { map } from 'underscore';
 
-export class Cauldron extends ContractClient {
+export class Cauldron extends ContractBase {
   contract: Contract;
+  chainId: number;
+  cachedBentoBox?: Vault;
+  cachedOracle?: Oracle;
+  cachedCollateral?: Token;
 
   public constructor(
     options: Partial<{
       contractAddress: string;
+      abi: ContractInterface;
+      chainId: number;
       provider: ethers.providers.BaseProvider;
       signer: ethers.Signer;
     }>
@@ -19,7 +26,8 @@ export class Cauldron extends ContractClient {
     if (!this.contractAddress) {
       throw new Error('contractAddress not provided - unable to execute message');
     }
-    this.contract = new Contract(this.contractAddress, cauldronAbi, this.provider);
+    this.contract = new Contract(this.contractAddress, this.abi, this.provider);
+    this.chainId = options.chainId as number;
   }
 
   public async borrowOpeningFee(): Promise<BigNumber> {
@@ -47,22 +55,25 @@ export class Cauldron extends ContractClient {
     return accrueInfo.INTEREST_PER_SECOND.mul(SECONDS_PER_YEAR);
   }
 
-  public async bentoBox(): Promise<BentoBox> {
-    return new BentoBox({
+  public async bentoBox(): Promise<Vault> {
+    this.cachedBentoBox ||= new Vault({
       contractAddress: await this.contract.bentoBox(),
       provider: this.provider,
       signer: this.signer,
     });
+
+    return this.cachedBentoBox;
   }
 
   // TODO: #borrowLimit
 
   public async collateral(): Promise<Token> {
-    return new Token({
+    this.cachedCollateral ||= new Token({
       contractAddress: await this.contract.collateral(),
       provider: this.provider,
       signer: this.signer,
     });
+    return this.cachedCollateral;
   }
 
   public async exchangeRate(): Promise<BigNumber> {
@@ -82,11 +93,13 @@ export class Cauldron extends ContractClient {
   }
 
   public async oracle(): Promise<Oracle> {
-    return new Oracle({
+    this.cachedOracle ||= new Oracle({
       contractAddress: await this.contract.oracle(),
       provider: this.provider,
       signer: this.signer,
     });
+
+    return this.cachedOracle;
   }
 
   public async oracleData(): Promise<string> {
@@ -102,8 +115,8 @@ export class Cauldron extends ContractClient {
   }
 
   public async totalBorrow(): Promise<{ elastic: BigNumber; base: BigNumber }> {
-    // Base is the borrow amount that is displayed on the website
-    // Elastic is what users actually owe given interest
+    // Base is the initial borrow amount
+    // Elastic is what is actually owed with interest
     return await this.contract.totalBorrow();
   }
 
@@ -119,10 +132,19 @@ export class Cauldron extends ContractClient {
     return await this.contract.userCollateralShare(address);
   }
 
-  public async userBorrow(address: string): Promise<BigNumber> {
-    let totalBorrow = await this.totalBorrow();
-    let userBorrowPart = await this.userBorrowPart(address);
-    // Parts != 1 MIM. To convert to MIM, take elastic / base and multiply by userBorrowPart
-    return totalBorrow.elastic.div(totalBorrow.base).mul(userBorrowPart);
+  public async cook(actions: Array<ActionBase>) {
+    const estimateGas = await this.contract.estimateGas.cook(
+      map(actions, (action) => action.actionId()),
+      map(actions, (action) => action.value()),
+      map(actions, (action) => action.data())
+    );
+
+    console.log(estimateGas.toString());
+
+    // return await this.contract.connect(this.signer as Signer).cook(
+    //   map(actions, (action) => action.actionId()),
+    //   map(actions, (action) => action.value()),
+    //   map(actions, (action) => action.data())
+    // );
   }
 }

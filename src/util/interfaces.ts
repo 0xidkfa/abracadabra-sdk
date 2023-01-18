@@ -24,9 +24,14 @@ export interface ChainConfig {
 
 export interface MarketConfig {
   name: string;
-  cauldron: string;
+  cauldron: CauldronConfig;
   oracle: string;
   leverageSwapper: string;
   liquidationSwapper: string;
   strategy?: string;
+}
+
+export interface CauldronConfig {
+  address: string;
+  abi: any;
 }

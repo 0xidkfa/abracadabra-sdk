@@ -1,5 +1,5 @@
 import { BigNumber, Contract, ethers, Signer, Wallet } from 'ethers';
-import { BentoBox, Cauldron, Oracle, Token } from './src/contracts/index';
+import { Vault, Cauldron, Oracle, Token } from './src/contracts/index';
 import { DEFAULT_CHAIN_OPTIONS } from './src/configs/defaultConfig';
 import _ = require('underscore');
 

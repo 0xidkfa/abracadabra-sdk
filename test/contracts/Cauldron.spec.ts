@@ -1,7 +1,11 @@
+import { CauldronV2Flat as CauldronAbi } from '../../src/contracts/abis/cauldrons';
 import { assert } from 'chai';
-import { BigNumber, ethers, Signer, Wallet } from 'ethers';
-import { BentoBox, Cauldron, Oracle, Token } from '../src/contracts/index';
+import { BigNumber, ethers, providers, Signer, Wallet } from 'ethers';
+import { Vault, Cauldron, Oracle, Token } from '../../src/contracts/index';
+import { Borrow, BentoWithdraw, BentoDeposit, AddCollateral } from '../../src/models/cookActions';
 import nock from 'nock';
+import { TEST_PRIVATE_KEY } from '../constants';
+import { expandDecimals } from '../../src/util/helpers';
 // import { nockBack } from './testHelper';
 
 describe('Cauldron', () => {
@@ -13,6 +17,7 @@ describe('Cauldron', () => {
 
     cauldron = new Cauldron({
       contractAddress: '0xc6B2b3fE7c3D7a6f823D9106E22e66660709001e',
+      abi: CauldronAbi,
       provider: new ethers.providers.JsonRpcProvider('https://virginia.rpc.blxrbdn.com'),
     });
   });
@@ -65,10 +70,10 @@ describe('Cauldron', () => {
   });
 
   describe('#bentoBox', async () => {
-    it('returns an instance of BentoBox', async () => {
+    it('returns an instance of Vault', async () => {
       const { nockDone, context } = await nock.back('bentoBox.json');
       let response = await cauldron.bentoBox();
-      assert.instanceOf(response, BentoBox);
+      assert.instanceOf(response, Vault);
       assert.equal(response.contractAddress, '0xd96f48665a1410C0cd669A88898ecA36B9Fc2cce');
       nockDone();
     });
@@ -194,11 +199,40 @@ describe('Cauldron', () => {
     });
   });
 
-  describe('#userBorrow', async () => {
-    it('returns an object representing a user borrow', async () => {
-      const { nockDone, context } = await nock.back('userBorrow.json');
-      let response = await cauldron.userBorrow('0x99459a327e2e1f7535501aff6a1aada7024c45fd');
-      assert.deepEqual(response.toString(), '1994617604729843600000000');
+  describe('#cook', async () => {
+    let wallet: Wallet;
+    let provider: providers.JsonRpcProvider;
+
+    beforeEach(function () {
+      provider = new ethers.providers.JsonRpcProvider(
+        'https://rpc.tenderly.co/fork/657a2811-b185-40c8-93af-28fab4e98b82'
+      );
+      wallet = new Wallet(TEST_PRIVATE_KEY).connect(provider);
+      cauldron = new Cauldron({
+        contractAddress: '0xc6B2b3fE7c3D7a6f823D9106E22e66660709001e',
+        abi: CauldronAbi,
+        provider: provider,
+        signer: wallet,
+      });
+    });
+
+    it('should return a cook with the right set of parameters for a borrow', async () => {
+      const { nockDone, context } = await nock.back('cook.json');
+
+      console.log(wallet.address);
+
+      let actions = [
+        new Borrow(BigNumber.from('20000000000000000000'), wallet.address),
+        new BentoWithdraw(
+          '0x99d8a9c45b2eca8864373a26d1459e3dff1e17f3',
+          wallet.address,
+          BigNumber.from('20000000000000000000'),
+          BigNumber.from(0)
+        ),
+      ];
+      await cauldron.cook(actions);
+      assert.deepEqual(await cauldron.userBorrowPart(wallet.address), BigNumber.from('5000').mul(expandDecimals(18)));
+
       nockDone();
     });
   });

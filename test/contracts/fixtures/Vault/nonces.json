@@ -17,7 +17,7 @@
         },
         "rawHeaders": [
             "Date",
-            "Wed, 14 Dec 2022 01:26:54 GMT",
+            "Fri, 23 Dec 2022 01:13:27 GMT",
             "Content-Type",
             "application/json",
             "Content-Length",
@@ -47,7 +47,7 @@
         },
         "rawHeaders": [
             "Date",
-            "Wed, 14 Dec 2022 01:26:55 GMT",
+            "Fri, 23 Dec 2022 01:13:27 GMT",
             "Content-Type",
             "application/json",
             "Content-Length",
@@ -67,8 +67,8 @@
             "method": "eth_call",
             "params": [
                 {
-                    "to": "0xd31e19a0574dbf09310c3b06f3416661b4dc7324",
-                    "data": "0x8285ef40"
+                    "to": "0xd96f48665a1410c0cd669a88898eca36b9fc2cce",
+                    "data": "0x7ecebe0000000000000000000000000099459a327e2e1f7535501aff6a1aada7024c45fd"
                 },
                 "latest"
             ],
@@ -79,15 +79,15 @@
         "response": {
             "jsonrpc": "2.0",
             "id": 44,
-            "result": "0x0000000000000000000000000000000000000000000a6f11514e701ad27263880000000000000000000000000000000000000000000a6d3f40b8191b65e78e0c"
+            "result": "0x0000000000000000000000000000000000000000000000000000000000000002"
         },
         "rawHeaders": [
             "Date",
-            "Wed, 14 Dec 2022 01:26:55 GMT",
+            "Fri, 23 Dec 2022 01:13:28 GMT",
             "Content-Type",
             "application/json",
             "Content-Length",
-            "168",
+            "104",
             "Connection",
             "close",
             "Vary",

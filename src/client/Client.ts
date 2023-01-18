@@ -42,7 +42,13 @@ export class Client {
 
         this.markets[marketSymbol] = {
           name: market.name,
-          cauldron: new Cauldron({ contractAddress: market.cauldron, provider: this.provider, signer: this.signer }),
+          cauldron: new Cauldron({
+            contractAddress: market.cauldron.address,
+            abi: market.cauldron.abi,
+            chainId: clientOptions.chainId,
+            provider: this.provider,
+            signer: this.signer,
+          }),
           oracle: market.oracle,
           liquidationSwapper: market.liquidationSwapper,
           leverageSwapper: market.leverageSwapper,

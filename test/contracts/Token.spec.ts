@@ -1,6 +1,6 @@
 import { assert } from 'chai';
 import { BigNumber, ethers, Signer, Wallet } from 'ethers';
-import { BentoBox, Cauldron, Oracle, Token } from '../src/contracts/index';
+import { Token } from '../../src/contracts/index';
 import nock from 'nock';
 
 describe('Token', () => {

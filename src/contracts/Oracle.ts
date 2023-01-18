@@ -1,8 +1,8 @@
 import oracleAbi from './abis/oracleAbi.json';
-import { ContractClient } from './ContractClient';
+import { ContractBase } from './ContractBase';
 import { BigNumber, Contract, ethers, Signer, Wallet } from 'ethers';
 
-export class Oracle extends ContractClient {
+export class Oracle extends ContractBase {
   contract: Contract;
 
   public constructor(

@@ -1,8 +1,8 @@
 import erc20Abi from './abis/erc20Abi.json';
-import { ContractClient } from './ContractClient';
+import { ContractBase } from './ContractBase';
 import { BigNumber, Contract, ethers, Signer, Wallet } from 'ethers';
 
-export class Token extends ContractClient {
+export class Token extends ContractBase {
   contract: Contract;
 
   public constructor(
