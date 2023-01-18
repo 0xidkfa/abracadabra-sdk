@@ -41,8 +41,8 @@ export class Market {
 
   async getMaxBorrow(): Promise<BigNumber> {
     let bentoBox = await this.bentoBox();
-    const poolBalance = await bentoBox.balanceOf(this.client.chain.mimToken, this.cauldron.contractAddress);
-    const toAmount = await bentoBox.toAmount(this.client.chain.mimToken, poolBalance, false);
+    const poolBalance = await bentoBox.balanceOf(this.client.chain().mimToken, this.cauldron.contractAddress);
+    const toAmount = await bentoBox.toAmount(this.client.chain().mimToken, poolBalance, false);
     return toAmount;
   }
 

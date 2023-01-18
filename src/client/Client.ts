@@ -18,7 +18,7 @@ export class Abracadabra {
   markets: {
     [symbol: string]: Market;
   };
-  chain: ChainConfig;
+  private chainConfig: ChainConfig;
 
   constructor(chain: ChainSymbol, options: Partial<ClientConfig> = {}) {
     const clientOptions = { ...DEFAULT_CHAIN_OPTIONS[ChainSymbol[chain]], ...options };
@@ -30,7 +30,7 @@ export class Abracadabra {
         ? clientOptions.provider?.getSigner()
         : undefined);
     this.markets = {};
-    this.chain = clientOptions.chain!;
+    this.chainConfig = clientOptions.chain!;
 
     if (clientOptions && clientOptions.markets)
       Object.entries(clientOptions.markets).forEach((keyval) => {
@@ -43,5 +43,9 @@ export class Abracadabra {
 
   providerOrSigner() {
     return this.signer || this.provider;
+  }
+
+  chain() {
+    return this.chainConfig;
   }
 }

@@ -1,4 +1,5 @@
 import { BigNumber, Signer, providers, Wallet } from 'ethers';
+import { Abracadabra } from '../client';
 import { Vault } from '../contracts';
 
 export class SignatureCollector {
@@ -6,16 +7,10 @@ export class SignatureCollector {
   private signer: Signer;
   private chainId: number;
 
-  public constructor(
-    options: Partial<{
-      vault: Vault;
-      signer: Signer;
-      chainId: number;
-    }>
-  ) {
-    this.vault = options.vault as Vault;
-    this.signer = options.signer as Signer;
-    this.chainId = options.chainId as number;
+  public constructor(client: Abracadabra, vault: Vault) {
+    this.vault = vault;
+    this.signer = client.signer!;
+    this.chainId = client.chain().chainId;
   }
 
   async getDomain() {
@@ -49,6 +44,7 @@ export class SignatureCollector {
   }
 
   public async getNonce(): Promise<string> {
+    console.log(await this.signer.getAddress());
     const nonces = await this.vault.nonces(await this.signer.getAddress());
     return nonces.toString();
   }

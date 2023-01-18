@@ -1,3 +1,5 @@
+import { ContractInterface } from 'ethers';
+
 export enum ChainSymbol {
   eth = 'eth',
   //   bnb = 'bnb',
@@ -36,7 +38,7 @@ export interface MarketConfig {
 
 export interface CauldronConfig {
   contractAddress: string;
-  abi: any;
+  abi: ContractInterface;
 }
 
 export interface AddressConfig {

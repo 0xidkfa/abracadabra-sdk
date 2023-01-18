@@ -2,18 +2,27 @@ import { assert } from 'chai';
 import { BigNumber, ethers, Signer, Wallet } from 'ethers';
 import { Cauldron, Oracle, Token } from '../../src/contracts/index';
 import nock from 'nock';
+import { Abracadabra } from '../../src/client';
+import { TEST_PRIVATE_KEY, RecursivePartial } from '../constants';
+import sinon from 'sinon';
+import { MarketConfig } from '../../src/util/interfaces';
 
 describe('Oracle', () => {
   var oracle: Oracle;
+  var abracadabra: Abracadabra;
 
   beforeEach(function () {
     nock.back.fixtures = __dirname + '/fixtures/oracle';
     nock.back.setMode('record');
 
-    oracle = new Oracle({
-      contractAddress: '0xfa267599bc504a60806b24656495d89064cbd972',
-      provider: new ethers.providers.JsonRpcProvider('https://virginia.rpc.blxrbdn.com'),
+    abracadabra = sinon.createStubInstance(Abracadabra, {
+      providerOrSigner: new ethers.providers.JsonRpcProvider('https://virginia.rpc.blxrbdn.com'),
     });
+
+    let mockMarketConfig: RecursivePartial<MarketConfig> = {
+      oracle: { contractAddress: '0xfa267599bc504a60806b24656495d89064cbd972' },
+    };
+    oracle = new Oracle(abracadabra, mockMarketConfig as MarketConfig);
   });
 
   describe('#name', () => {
@@ -46,7 +55,7 @@ describe('Oracle', () => {
   describe('#peek', () => {
     it('should return the peek of the oracle', async () => {
       const { nockDone, context } = await nock.back('peek.json');
-      let [bool, response] = await oracle.peek();
+      let [bool, response] = await oracle.peek('0x00');
       assert.deepEqual(response, BigNumber.from('737645081381313'));
       nockDone();
     });
@@ -55,7 +64,7 @@ describe('Oracle', () => {
   describe('#peekSpot', () => {
     it('should return the peekSpot of the oracle', async () => {
       const { nockDone, context } = await nock.back('peekSpot.json');
-      let response = await oracle.peekSpot();
+      let response = await oracle.peekSpot('0x00');
       assert.deepEqual(response, BigNumber.from('737645081381313'));
       nockDone();
     });

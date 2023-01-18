@@ -2,18 +2,22 @@ import { assert } from 'chai';
 import { BigNumber, ethers, Signer, Wallet } from 'ethers';
 import { Vault, Cauldron, Oracle, Token } from '../../src/contracts/index';
 import nock from 'nock';
+import { Abracadabra } from '../../src/client';
+import Sinon from 'sinon';
 
 describe('Vault', () => {
   var vault: Vault;
+  var abracadabra: Abracadabra;
 
   beforeEach(function () {
     nock.back.fixtures = __dirname + '/fixtures/Vault';
     nock.back.setMode('record');
 
-    vault = new Vault({
-      contractAddress: '0xd96f48665a1410C0cd669A88898ecA36B9Fc2cce',
-      provider: new ethers.providers.JsonRpcProvider('https://virginia.rpc.blxrbdn.com'),
+    abracadabra = Sinon.createStubInstance(Abracadabra, {
+      providerOrSigner: new ethers.providers.JsonRpcProvider('https://virginia.rpc.blxrbdn.com'),
     });
+
+    vault = new Vault(abracadabra, '0xd96f48665a1410C0cd669A88898ecA36B9Fc2cce');
   });
 
   describe('#toAmount', () => {

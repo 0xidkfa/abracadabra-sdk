@@ -3,23 +3,27 @@ import { BigNumber, ethers, Wallet } from 'ethers';
 import { SignatureCollector } from '../../src/models/SignatureCollector';
 import nock from 'nock';
 import { Vault } from '../../src/contracts';
-import * as sinon from 'sinon';
+import Sinon, * as sinon from 'sinon';
 import { TEST_PRIVATE_KEY } from '../constants';
+import { Abracadabra } from '../../src/client';
+import { ChainSymbol } from '../../src/util/interfaces';
 // import { nockBack } from './testHelper';
 
 describe('SignatureCollector', () => {
   var collector: SignatureCollector;
+  var abracadabra: Abracadabra;
 
   beforeEach(function () {
     nock.back.fixtures = __dirname + '/fixtures/SignatureCollector';
     nock.back.setMode('record');
 
     let provider = new ethers.providers.JsonRpcProvider('https://virginia.rpc.blxrbdn.com');
-    collector = new SignatureCollector({
-      vault: new Vault({ contractAddress: '0xd96f48665a1410C0cd669A88898ecA36B9Fc2cce', provider }),
-      signer: new Wallet(TEST_PRIVATE_KEY).connect(provider),
-      chainId: 1,
-    });
+    abracadabra = new Abracadabra(ChainSymbol.eth, { signer: new Wallet(TEST_PRIVATE_KEY).connect(provider) });
+
+    collector = new SignatureCollector(
+      abracadabra,
+      new Vault(abracadabra, '0xd96f48665a1410C0cd669A88898ecA36B9Fc2cce')
+    );
   });
 
   describe('#getNonce', async () => {
