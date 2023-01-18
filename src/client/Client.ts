@@ -12,7 +12,7 @@ export interface ClientConfig {
   chains: ChainConfig; // after picking specific chain...
 }
 
-export class Client {
+export class Abracadabra {
   provider?: ethers.providers.BaseProvider;
   signer?: ethers.Signer;
   markets: {

@@ -5,7 +5,7 @@ import { Vault, Oracle, Token } from './index';
 import { ActionBase } from '../models/cookActions/ActionBase';
 import { map } from 'underscore';
 import { ChainConfig, MarketConfig } from '../util/interfaces';
-import { Client } from '../client';
+import { Abracadabra } from '../client';
 import { Market } from '../models';
 
 export class Cauldron extends ContractBase {
@@ -14,7 +14,7 @@ export class Cauldron extends ContractBase {
   cachedCollateral?: Token;
   marketConfig: MarketConfig;
 
-  public constructor(client: Client, marketConfig: MarketConfig) {
+  public constructor(client: Abracadabra, marketConfig: MarketConfig) {
     super({ client, ...marketConfig.cauldron });
     this.marketConfig = marketConfig;
   }

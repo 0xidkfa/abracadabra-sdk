@@ -1,10 +1,10 @@
 import vaultAbi from './abis/vaultAbi.json';
 import { ContractBase } from './ContractBase';
 import { BigNumber } from 'ethers';
-import { Client } from '../client';
+import { Abracadabra } from '../client';
 
 export class Vault extends ContractBase {
-  public constructor(client: Client, contractAddress: string) {
+  public constructor(client: Abracadabra, contractAddress: string) {
     super({ client, contractAddress, abi: vaultAbi });
   }
 

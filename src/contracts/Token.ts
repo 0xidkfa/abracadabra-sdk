@@ -1,10 +1,10 @@
 import erc20Abi from './abis/erc20Abi.json';
 import { ContractBase } from './ContractBase';
 import { BigNumber, Contract, ethers, Signer, Wallet } from 'ethers';
-import { Client } from '../client';
+import { Abracadabra } from '../client';
 
 export class Token extends ContractBase {
-  public constructor(client: Client, contractAddress: string) {
+  public constructor(client: Abracadabra, contractAddress: string) {
     super({ client, contractAddress, abi: erc20Abi });
   }
 

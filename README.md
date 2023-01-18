@@ -16,8 +16,25 @@ This SDK also aims to make it easier for developers to execute actions such as:
 
 # Installation
 
-You can install the latest version of `abracadabra-money.js` through npm:
+TODO: You can install the latest version of `abracadabra-money.js` through npm:
 
 ```
 npm install abracadabra-money.js
+```
+
+# Usage
+
+The Abracadabra client can be initialized as follows:
+
+```
+import { ethers } from 'ethers';
+import { Abracadabra } from './src';
+import { ChainSymbol } from './src/util/interfaces';
+
+let provider = new ethers.providers.JsonRpcProvider(PROVIDER_URL);
+let wallet = ethers.Wallet.createRandom().connect(provider);
+let abracadabra = new Abracadabra(ChainSymbol.eth, { signer: wallet });
+
+let market = abracadabra.markets['crv']
+console.log('TVL: ', (await market.tvl()).toString())
 ```

@@ -4,17 +4,17 @@ import { BigNumber, Contract, ethers, Signer, Wallet, utils } from 'ethers';
 import { bnToFloat, expandDecimals } from '../util/helpers';
 import { ChainConfig, MarketConfig } from '../util/interfaces';
 import { Cauldron, Oracle, Vault, Token } from '../contracts';
-import { Client } from '../client';
+import { Abracadabra } from '../client';
 
 export class Market {
   cauldron: Cauldron;
   marketConfig: MarketConfig;
-  client: Client;
+  client: Abracadabra;
   // leverageSwapper: string;
   // liquidationSwapper: string;
   // strategy?: string;
 
-  public constructor(client: Client, marketConfig: MarketConfig) {
+  public constructor(client: Abracadabra, marketConfig: MarketConfig) {
     this.client = client;
     this.marketConfig = marketConfig;
     this.cauldron = new Cauldron(this.client, this.marketConfig);

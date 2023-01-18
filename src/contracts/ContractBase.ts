@@ -1,15 +1,15 @@
 import { Contract, ethers, Signer, Wallet, ContractInterface, providers } from 'ethers';
-import { Client } from '../client';
+import { Abracadabra } from '../client';
 
 interface ContractParams {
-  client: Client;
+  client: Abracadabra;
   contractAddress: string;
   abi: ContractInterface;
 }
 
 export abstract class ContractBase {
   public contractAddress: string;
-  public client: Client;
+  public client: Abracadabra;
   public contract: Contract;
 
   constructor({ client, contractAddress, abi }: ContractParams) {

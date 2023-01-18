@@ -1,11 +1,11 @@
 import oracleAbi from './abis/oracleAbi.json';
 import { ContractBase } from './ContractBase';
 import { BigNumber, Contract, ethers, Signer, Wallet } from 'ethers';
-import { Client } from '../client';
+import { Abracadabra } from '../client';
 import { MarketConfig } from '../util/interfaces';
 
 export class Oracle extends ContractBase {
-  public constructor(client: Client, marketConfig: MarketConfig) {
+  public constructor(client: Abracadabra, marketConfig: MarketConfig) {
     super({ client, ...marketConfig.oracle, abi: oracleAbi });
   }
 
