@@ -4,31 +4,20 @@ import { BigNumber, Contract, ethers, Signer, Wallet, utils } from 'ethers';
 import { bnToFloat, expandDecimals } from '../util/helpers';
 import { ChainConfig, MarketConfig } from '../util/interfaces';
 import { Cauldron, Oracle, Vault, Token } from '../contracts';
+import { Client } from '../client';
 
 export class Market {
   cauldron: Cauldron;
   marketConfig: MarketConfig;
-  chainConfig: ChainConfig;
+  client: Client;
   // leverageSwapper: string;
   // liquidationSwapper: string;
   // strategy?: string;
 
-  public constructor(
-    options: Partial<{
-      provider: ethers.providers.BaseProvider;
-      signer: ethers.Signer;
-      market: MarketConfig;
-      chain: ChainConfig; // NEED TO CREATE CONCEPT OF CHAIN TO GET COMMON CHAIN CONFIG, LIKE MIM TOKEN...
-    }>
-  ) {
-    this.marketConfig = options.market!;
-    this.chainConfig = options.chain!;
-    this.cauldron = new Cauldron({
-      contractAddress: options.market?.cauldron.address,
-      chain: options.chain,
-      abi: options.market?.cauldron.abi,
-      provider: options.provider,
-    });
+  public constructor(client: Client, marketConfig: MarketConfig) {
+    this.client = client;
+    this.marketConfig = marketConfig;
+    this.cauldron = new Cauldron(this.client, this.marketConfig);
   }
 
   public async init() {
@@ -52,8 +41,8 @@ export class Market {
 
   async getMaxBorrow(): Promise<BigNumber> {
     let bentoBox = await this.bentoBox();
-    const poolBalance = await bentoBox.balanceOf(this.chainConfig.mimToken, this.cauldron.contractAddress);
-    const toAmount = await bentoBox.toAmount(this.chainConfig.mimToken, poolBalance, false);
+    const poolBalance = await bentoBox.balanceOf(this.client.chain.mimToken, this.cauldron.contractAddress);
+    const toAmount = await bentoBox.toAmount(this.client.chain.mimToken, poolBalance, false);
     return toAmount;
   }
 
@@ -62,10 +51,15 @@ export class Market {
     return totalBorrow.elastic;
   }
 
-  public async tvl(): Promise<BigNumber> {
-    let { oracle, bentoBox, collateral } = await this.init();
+  public async oracleExchangeRate() {
+    let { oracle } = await this.init();
+    let oracleData = await this.cauldron.oracleData();
+    return await oracle.peekSpot(oracleData);
+  }
 
-    let oracleExchangeRate = await oracle.peekSpot();
+  public async tvl(): Promise<BigNumber> {
+    let { bentoBox, collateral } = await this.init();
+    let oracleExchangeRate = await this.oracleExchangeRate();
     let collateralDecimals = await collateral.decimals();
     let totalCollateralShare = await this.cauldron.totalCollateralShare();
     let totalTokensDeposited = await bentoBox.toAmount(
@@ -85,9 +79,8 @@ export class Market {
   }
 
   public async userCollateral(address: string): Promise<BigNumber> {
-    let { oracle, bentoBox, collateral } = await this.init();
-
-    let oracleExchangeRate = await oracle.peekSpot();
+    let { bentoBox, collateral } = await this.init();
+    let oracleExchangeRate = await this.oracleExchangeRate();
     let collateralDecimals = await collateral.decimals();
     let userCollateralShare = await this.cauldron.userCollateralShare(address);
     let userTokensDeposited = await bentoBox.toAmount(collateral.contractAddress as string, userCollateralShare, false);

@@ -1,23 +1,11 @@
 import vaultAbi from './abis/vaultAbi.json';
 import { ContractBase } from './ContractBase';
-import { BigNumber, Contract, ethers, Signer, Wallet } from 'ethers';
+import { BigNumber } from 'ethers';
+import { Client } from '../client';
 
 export class Vault extends ContractBase {
-  contract: Contract;
-
-  public constructor(
-    options: Partial<{
-      contractAddress: string;
-      provider: ethers.providers.BaseProvider;
-      signer: ethers.Signer;
-    }>
-  ) {
-    super(options);
-
-    if (!this.contractAddress) {
-      throw new Error('contractAddress not provided - unable to execute message');
-    }
-    this.contract = new Contract(this.contractAddress, vaultAbi, this.provider);
+  public constructor(client: Client, contractAddress: string) {
+    super({ client, contractAddress, abi: vaultAbi });
   }
 
   public async toAmount(tokenAddress: string, share: BigNumber, roundUp: boolean): Promise<BigNumber> {

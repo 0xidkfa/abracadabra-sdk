@@ -4,31 +4,19 @@ import { SECONDS_PER_YEAR } from '../util/constants';
 import { Vault, Oracle, Token } from './index';
 import { ActionBase } from '../models/cookActions/ActionBase';
 import { map } from 'underscore';
-import { ChainConfig } from '../util/interfaces';
+import { ChainConfig, MarketConfig } from '../util/interfaces';
+import { Client } from '../client';
+import { Market } from '../models';
 
 export class Cauldron extends ContractBase {
-  contract: Contract;
-  chainId: number;
   cachedBentoBox?: Vault;
   cachedOracle?: Oracle;
   cachedCollateral?: Token;
+  marketConfig: MarketConfig;
 
-  public constructor(
-    options: Partial<{
-      contractAddress: string;
-      abi: ContractInterface;
-      chain: ChainConfig;
-      provider: ethers.providers.BaseProvider;
-      signer: ethers.Signer;
-    }>
-  ) {
-    super(options);
-
-    if (!this.contractAddress) {
-      throw new Error('contractAddress not provided - unable to execute message');
-    }
-    this.contract = new Contract(this.contractAddress, this.abi, this.provider);
-    this.chainId = options.chain?.chainId as number;
+  public constructor(client: Client, marketConfig: MarketConfig) {
+    super({ client, ...marketConfig.cauldron });
+    this.marketConfig = marketConfig;
   }
 
   public async borrowOpeningFee(): Promise<BigNumber> {
@@ -57,11 +45,7 @@ export class Cauldron extends ContractBase {
   }
 
   public async bentoBox(): Promise<Vault> {
-    this.cachedBentoBox ||= new Vault({
-      contractAddress: await this.contract.bentoBox(),
-      provider: this.provider,
-      signer: this.signer,
-    });
+    this.cachedBentoBox ||= new Vault(this.client, await this.contract.bentoBox());
 
     return this.cachedBentoBox;
   }
@@ -69,11 +53,7 @@ export class Cauldron extends ContractBase {
   // TODO: #borrowLimit
 
   public async collateral(): Promise<Token> {
-    this.cachedCollateral ||= new Token({
-      contractAddress: await this.contract.collateral(),
-      provider: this.provider,
-      signer: this.signer,
-    });
+    this.cachedCollateral ||= new Token(this.client, await this.contract.collateral());
     return this.cachedCollateral;
   }
 
@@ -94,12 +74,7 @@ export class Cauldron extends ContractBase {
   }
 
   public async oracle(): Promise<Oracle> {
-    this.cachedOracle ||= new Oracle({
-      contractAddress: await this.contract.oracle(),
-      provider: this.provider,
-      signer: this.signer,
-    });
-
+    this.cachedOracle ||= new Oracle(this.client, this.marketConfig);
     return this.cachedOracle;
   }
 

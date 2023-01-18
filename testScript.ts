@@ -1,35 +1,28 @@
 import { BigNumber, Contract, ethers, Signer, Wallet } from 'ethers';
-import { Vault, Cauldron, Oracle, Token } from './src/contracts/index';
-import { DEFAULT_CHAIN_OPTIONS } from './src/configs/defaultConfig';
 import _ = require('underscore');
 import { Client } from './src';
-import { ChainOptions, MarketConfig, ChainConfig, Chain } from './src/util/interfaces';
-import { Market } from './src/models';
+import { ChainSymbol } from './src/util/interfaces';
+
+const PROVIDER_URL = 'https://rpc.tenderly.co/fork/352aab83-3115-4d63-a75a-b0cec77f7414';
 
 async function main() {
-  // let markets = DEFAULT_CHAIN_OPTIONS.eth?.markets;
-  // if (markets == undefined) return;
-  // for (let market of _.values(_.pick(markets, 'susdc', 'susdt'))) {
-  //   let cauldron = new Cauldron({
-  //     contractAddress: market.cauldron,
-  //     provider: new ethers.providers.JsonRpcProvider('https://virginia.rpc.blxrbdn.com'),
-  //   });
+  let provider = new ethers.providers.JsonRpcProvider(PROVIDER_URL);
+  let wallet = ethers.Wallet.createRandom().connect(provider);
+  let client = new Client(ChainSymbol.eth, { signer: wallet });
+  let results = [];
 
-  //   // let totalBorrow = await cauldron.totalBorrow();
-  //   // console.log(totalBorrow.elastic.toString());
-  //   // console.log(totalBorrow.base.toString());
+  for (let [name, market] of Object.entries(client.markets)) {
+    let row = {
+      name: name,
+      mimBorrowed: (await market.totalMimBorrowed()).toString(),
+      tvl: (await market.tvl()).toString(),
+      mimRemaining: (await market.getMaxBorrow()).toString(),
+    };
+    console.log(row);
+    results.push(row);
+  }
 
-  //   // let tvl = await cauldron.tvl();
-  //   // console.log(tvl);
-  // }
-
-  let provider = new ethers.providers.JsonRpcProvider('https://virginia.rpc.blxrbdn.com');
-  let client = new Client(Chain.eth, { provider: provider });
-  let market = client.markets['yvcrvsteth-concentrated'];
-  console.log(market);
-  // let mimBorrowed = await market.totalMimBorrowed();
-  // let tvl = await market.tvl();
-  // console.log(mimBorrowed.toString(), tvl.toString());
+  console.table(results);
 }
 
 main();

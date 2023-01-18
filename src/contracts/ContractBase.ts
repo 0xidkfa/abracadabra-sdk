@@ -1,23 +1,20 @@
 import { Contract, ethers, Signer, Wallet, ContractInterface, providers } from 'ethers';
+import { Client } from '../client';
+
+interface ContractParams {
+  client: Client;
+  contractAddress: string;
+  abi: ContractInterface;
+}
 
 export abstract class ContractBase {
   public contractAddress: string;
-  public abi: ContractInterface;
-  public provider: providers.BaseProvider;
-  public signer?: ethers.Signer;
-  public abstract contract: Contract;
+  public client: Client;
+  public contract: Contract;
 
-  constructor(
-    options: Partial<{
-      contractAddress: string;
-      abi: ContractInterface;
-      provider: ethers.providers.BaseProvider;
-      signer: ethers.Signer;
-    }>
-  ) {
-    this.contractAddress = options.contractAddress as string;
-    this.abi = options.abi as ContractInterface;
-    this.provider = options.provider as providers.BaseProvider;
-    this.signer = options.signer;
+  constructor({ client, contractAddress, abi }: ContractParams) {
+    this.client = client;
+    this.contractAddress = contractAddress;
+    this.contract = new Contract(this.contractAddress, abi, client.providerOrSigner());
   }
 }

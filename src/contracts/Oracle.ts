@@ -1,24 +1,12 @@
 import oracleAbi from './abis/oracleAbi.json';
 import { ContractBase } from './ContractBase';
 import { BigNumber, Contract, ethers, Signer, Wallet } from 'ethers';
+import { Client } from '../client';
+import { MarketConfig } from '../util/interfaces';
 
 export class Oracle extends ContractBase {
-  contract: Contract;
-
-  public constructor(
-    options: Partial<{
-      contractAddress: string;
-      provider: ethers.providers.BaseProvider;
-      signer: ethers.Signer;
-    }>
-  ) {
-    super(options);
-
-    if (!this.contractAddress) {
-      throw new Error('contractAddress not provided - unable to execute message');
-    }
-
-    this.contract = new Contract(this.contractAddress, oracleAbi, this.provider);
+  public constructor(client: Client, marketConfig: MarketConfig) {
+    super({ client, ...marketConfig.oracle, abi: oracleAbi });
   }
 
   public async name(): Promise<string> {
@@ -33,12 +21,12 @@ export class Oracle extends ContractBase {
     return await this.contract.owner();
   }
 
-  public async peek(): Promise<[boolean, BigNumber]> {
-    return await this.contract.peek('0x00');
+  public async peek(oracleData: string): Promise<[boolean, BigNumber]> {
+    return await this.contract.peek(oracleData);
   }
 
-  public async peekSpot(): Promise<BigNumber> {
-    return await this.contract.peekSpot('0x00');
+  public async peekSpot(oracleData: string): Promise<BigNumber> {
+    return await this.contract.peekSpot(oracleData);
   }
 
   public async symbol(): Promise<string> {

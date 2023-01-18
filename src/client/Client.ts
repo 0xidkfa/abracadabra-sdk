@@ -1,6 +1,6 @@
 // import { Environment } from '../util/interfaces';
 import { ethers } from 'ethers';
-import { ChainOptions, MarketConfig, ChainConfig, Chain } from '../util/interfaces';
+import { ChainOptions, MarketConfig, ChainConfig, ChainSymbol } from '../util/interfaces';
 import { DEFAULT_CHAIN_OPTIONS } from '../configs/defaultConfig';
 import { Cauldron } from '../contracts/Cauldron';
 import _ = require('underscore');
@@ -18,9 +18,10 @@ export class Client {
   markets: {
     [symbol: string]: Market;
   };
+  chain: ChainConfig;
 
-  constructor(chain: Chain, options: Partial<ClientConfig> = {}) {
-    const clientOptions = { ...DEFAULT_CHAIN_OPTIONS[Chain[chain]], ...options };
+  constructor(chain: ChainSymbol, options: Partial<ClientConfig> = {}) {
+    const clientOptions = { ...DEFAULT_CHAIN_OPTIONS[ChainSymbol[chain]], ...options };
 
     this.provider = clientOptions.provider;
     this.signer =
@@ -29,17 +30,18 @@ export class Client {
         ? clientOptions.provider?.getSigner()
         : undefined);
     this.markets = {};
+    this.chain = clientOptions.chain!;
 
     if (clientOptions && clientOptions.markets)
       Object.entries(clientOptions.markets).forEach((keyval) => {
         let marketSymbol = keyval[0];
         let market = keyval[1];
 
-        this.markets[marketSymbol] = new Market({
-          provider: this.provider,
-          signer: this.signer,
-          market: market,
-        });
+        this.markets[marketSymbol] = new Market(this, market);
       });
+  }
+
+  providerOrSigner() {
+    return this.signer || this.provider;
   }
 }
