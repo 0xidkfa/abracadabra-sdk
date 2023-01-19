@@ -13,27 +13,19 @@ export interface ClientConfig {
 }
 
 export class Abracadabra {
-  provider?: ethers.providers.BaseProvider;
-  signer?: ethers.Signer;
   markets: {
     [symbol: string]: Market;
   };
+  clientOptions;
   private chainConfig: ChainConfig;
 
   constructor(chain: ChainSymbol, options: Partial<ClientConfig> = {}) {
-    const clientOptions = { ...DEFAULT_CHAIN_OPTIONS[ChainSymbol[chain]], ...options };
-
-    this.provider = clientOptions.provider;
-    this.signer =
-      clientOptions.signer ||
-      (clientOptions.provider instanceof ethers.providers.Web3Provider
-        ? clientOptions.provider?.getSigner()
-        : undefined);
+    this.clientOptions = { ...DEFAULT_CHAIN_OPTIONS[ChainSymbol[chain]], ...options };
+    this.chainConfig = this.clientOptions.chain!;
     this.markets = {};
-    this.chainConfig = clientOptions.chain!;
 
-    if (clientOptions && clientOptions.markets)
-      Object.entries(clientOptions.markets).forEach((keyval) => {
+    if (this.clientOptions && this.clientOptions.markets)
+      Object.entries(this.clientOptions.markets).forEach((keyval) => {
         let marketSymbol = keyval[0];
         let market = keyval[1];
 
@@ -42,7 +34,16 @@ export class Abracadabra {
   }
 
   providerOrSigner() {
-    return this.signer || this.provider;
+    return this.signer() || this.clientOptions.provider;
+  }
+
+  signer() {
+    return (
+      this.clientOptions.signer ||
+      (this.clientOptions.provider instanceof ethers.providers.Web3Provider
+        ? this.clientOptions.provider?.getSigner()
+        : undefined)
+    );
   }
 
   chain() {
