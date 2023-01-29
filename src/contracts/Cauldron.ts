@@ -1,18 +1,32 @@
 import { ContractBase } from './ContractBase';
-import { BigNumber, Contract, ethers, Signer, ContractInterface } from 'ethers';
+import {
+  BigNumber,
+  Contract,
+  ethers,
+  Signer,
+  ContractInterface,
+  utils,
+} from 'ethers';
 import { SECONDS_PER_YEAR } from '../util/constants';
-import { Vault, Oracle, Token } from './index';
+import { BentoBox, Oracle, Token } from './index';
 import { ActionBase } from '../models/cookActions/ActionBase';
 import { map } from 'underscore';
 import { ChainConfig, MarketConfig } from '../util/interfaces';
 import { Abracadabra } from '../client';
 import { Market } from '../models';
+import { expandDecimals, multicall } from '../util/helpers';
+
+interface AccrueInfo {
+  lastAccrued: BigNumber;
+  feesEarned: BigNumber;
+  INTEREST_PER_SECOND: BigNumber;
+}
 
 export class Cauldron extends ContractBase {
-  cachedBentoBox?: Vault;
+  marketConfig: MarketConfig;
+  cachedBentoBox?: BentoBox;
   cachedOracle?: Oracle;
   cachedCollateral?: Token;
-  marketConfig: MarketConfig;
 
   public constructor(client: Abracadabra, marketConfig: MarketConfig) {
     super({ client, ...marketConfig.cauldron });
@@ -20,23 +34,23 @@ export class Cauldron extends ContractBase {
   }
 
   public async borrowOpeningFee(): Promise<BigNumber> {
-    return await this.contract.BORROW_OPENING_FEE();
+    return await this.multicallContract.BORROW_OPENING_FEE();
   }
 
   public async collateralizationRate(): Promise<BigNumber> {
-    return await this.contract.COLLATERIZATION_RATE();
+    return await this.multicallContract.COLLATERIZATION_RATE();
   }
 
   public async liquidationMultiplier(): Promise<BigNumber> {
-    return await this.contract.LIQUIDATION_MULTIPLIER();
+    return await this.multicallContract.LIQUIDATION_MULTIPLIER();
   }
 
-  public async accrueInfo(): Promise<{
-    lastAccrued: BigNumber;
-    feesEarned: BigNumber;
-    INTEREST_PER_SECOND: BigNumber;
-  }> {
-    return await this.contract.accrueInfo();
+  public async liquidationFee(): Promise<BigNumber> {
+    return (await this.liquidationMultiplier()).sub(BigNumber.from('100000'));
+  }
+
+  public async accrueInfo(): Promise<AccrueInfo> {
+    return await this.multicallContract.accrueInfo();
   }
 
   public async interestPerYear(): Promise<BigNumber> {
@@ -44,8 +58,11 @@ export class Cauldron extends ContractBase {
     return accrueInfo.INTEREST_PER_SECOND.mul(SECONDS_PER_YEAR);
   }
 
-  public async bentoBox(): Promise<Vault> {
-    this.cachedBentoBox ||= new Vault(this.client, await this.contract.bentoBox());
+  public async bentoBox(): Promise<BentoBox> {
+    this.cachedBentoBox ||= new BentoBox(
+      this.client,
+      await this.multicallContract.bentoBox()
+    );
 
     return this.cachedBentoBox;
   }
@@ -53,7 +70,10 @@ export class Cauldron extends ContractBase {
   // TODO: #borrowLimit
 
   public async collateral(): Promise<Token> {
-    this.cachedCollateral ||= new Token(this.client, await this.multicallContract.collateral());
+    this.cachedCollateral ||= new Token(
+      this.client,
+      await this.multicallContract.collateral()
+    );
     return this.cachedCollateral;
   }
 
@@ -74,7 +94,10 @@ export class Cauldron extends ContractBase {
   }
 
   public async oracle(): Promise<Oracle> {
-    this.cachedOracle ||= new Oracle(this.client, this.marketConfig);
+    this.cachedOracle ||= new Oracle(
+      this.client,
+      await this.multicallContract.oracle()
+    );
     return this.cachedOracle;
   }
 
@@ -120,7 +143,7 @@ export class Cauldron extends ContractBase {
     return await this.contract.connect(this.client.signer()!).cook(
       map(actions, (action) => action.actionId()),
       map(actions, (action) => action.value()),
-      map(actions, (action) => action.data())
+      map(actions, (action) => action.data(), { estimateGas })
     );
   }
 }

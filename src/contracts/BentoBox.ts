@@ -1,14 +1,18 @@
-import vaultAbi from './abis/vaultAbi.json';
+import bentoBoxAbi from './abis/bentoBoxAbi.json';
 import { ContractBase } from './ContractBase';
 import { BigNumber } from 'ethers';
 import { Abracadabra } from '../client';
 
-export class Vault extends ContractBase {
+export class BentoBox extends ContractBase {
   public constructor(client: Abracadabra, contractAddress: string) {
-    super({ client, contractAddress, abi: vaultAbi });
+    super({ client, contractAddress, abi: bentoBoxAbi });
   }
 
-  public async toAmount(tokenAddress: string, share: BigNumber, roundUp: boolean): Promise<BigNumber> {
+  public async toAmount(
+    tokenAddress: string,
+    share: BigNumber,
+    roundUp: boolean
+  ): Promise<BigNumber> {
     return await this.multicallContract.toAmount(tokenAddress, share, roundUp);
   }
 

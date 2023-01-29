@@ -1,28 +1,34 @@
 import { BigNumber, Contract, ethers, Signer, Wallet } from 'ethers';
-import _ = require('underscore');
-import { Abracadabra } from './src';
-import { ChainSymbol } from './src/util/interfaces';
+// import _ = require('underscore');
+import { Abracadabra, Market } from './src';
+import { decodeMulticall } from './src/util/helpers';
+import { ChainSymbol, MarketInfo } from './src/util/interfaces';
+import { CauldronV2Flat as CauldronAbi } from './src/contracts/abis/cauldrons';
+import multicallAbi from './src/contracts/abis/multicallAbi.json';
+import marketLensAbi from './src/contracts/abis/marketLensAbi.json';
+import { expandDecimals } from './src/util/helpers';
+import _ from 'underscore';
 
-const PROVIDER_URL = 'https://rpc.tenderly.co/fork/352aab83-3115-4d63-a75a-b0cec77f7414';
+const PROVIDER_URL =
+  'https://rpc.tenderly.co/fork/e8a1e0a8-b46f-4194-8428-570ca8f25868';
+// const PROVIDER_URL = 'https://ava-mainnet.public.blastapi.io/ext/bc/C/rpc';
+// const PROVIDER_URL = 'https://arbitrum.blockpi.network/v1/rpc/public';
 
 async function main() {
-  let provider = new ethers.providers.JsonRpcProvider(PROVIDER_URL);
-  let wallet = ethers.Wallet.createRandom().connect(provider);
-  let client = new Abracadabra(ChainSymbol.eth, { signer: wallet });
-  let results = [];
+  let client = new Abracadabra(ChainSymbol.ethereum, {
+    provider: new ethers.providers.JsonRpcProvider(PROVIDER_URL),
+  });
+  let market = client.markets['wbtc'];
+  let response = await market.getMarketInfo();
+  // let response = await market.marketLens.getTotalCollateral();
+  // let response = await market.marketLens.getTotalCollateral();
 
-  for (let [name, market] of Object.entries(client.markets)) {
-    let row = {
-      name: name,
-      mimBorrowed: (await market.totalMimBorrowed()).toString(),
-      tvl: (await market.tvl()).toString(),
-      mimRemaining: (await market.getMaxBorrow()).toString(),
-    };
-    console.log(row);
-    results.push(row);
-  }
+  console.log(response);
 
-  console.table(results);
+  // let provider = new ethers.providers.JsonRpcProvider(PROVIDER_URL);
+  // let lensContract = new ethers.Contract('0x3d969e1bfb7871bce65ab1c067b893a205bf3a80', marketLensAbi, provider);
+  // let response = await lensContract.getMarketInfoCauldronV3('0x726413d7402fF180609d0EBc79506df8633701B1');
+  // console.log(response);
 }
 
 main();

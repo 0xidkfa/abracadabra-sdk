@@ -4,7 +4,7 @@ import { ChainSymbol } from '../../src/util/interfaces';
 
 describe('Client', () => {
   it('should require a chain parameter', () => {
-    let client = new Abracadabra(ChainSymbol.eth);
+    let client = new Abracadabra(ChainSymbol.ethereum);
     assert.notDeepEqual(client.markets, {});
   });
 });

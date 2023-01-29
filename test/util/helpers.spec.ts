@@ -15,4 +15,8 @@ describe('utils', () => {
       assert.equal(utils.bnToFloat(BigNumber.from(1234), 3), 1.234);
     });
   });
+
+  describe('.multicallArray', () => {
+    it('should take in an array of objects with promise values and return objects with the promises evaluated', () => {});
+  });
 });

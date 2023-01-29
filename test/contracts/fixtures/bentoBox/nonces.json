@@ -1,0 +1,116 @@
+[
+    {
+        "scope": "https://rpc.tenderly.co:443",
+        "method": "POST",
+        "path": "/fork/38655d0a-4d2e-4b54-aa49-042a113a24ed",
+        "body": {
+            "method": "eth_chainId",
+            "params": [],
+            "id": 42,
+            "jsonrpc": "2.0"
+        },
+        "status": 200,
+        "response": {
+            "id": 42,
+            "jsonrpc": "2.0",
+            "result": "0x1"
+        },
+        "rawHeaders": [
+            "Content-Type",
+            "application/json",
+            "Head",
+            "",
+            "Vary",
+            "Origin",
+            "Date",
+            "Mon, 13 Feb 2023 05:55:45 GMT",
+            "Content-Length",
+            "40",
+            "Via",
+            "1.1 google",
+            "Alt-Svc",
+            "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+            "Connection",
+            "close"
+        ],
+        "responseIsBinary": false
+    },
+    {
+        "scope": "https://rpc.tenderly.co:443",
+        "method": "POST",
+        "path": "/fork/38655d0a-4d2e-4b54-aa49-042a113a24ed",
+        "body": {
+            "method": "eth_chainId",
+            "params": [],
+            "id": 43,
+            "jsonrpc": "2.0"
+        },
+        "status": 200,
+        "response": {
+            "id": 43,
+            "jsonrpc": "2.0",
+            "result": "0x1"
+        },
+        "rawHeaders": [
+            "Content-Type",
+            "application/json",
+            "Head",
+            "",
+            "Vary",
+            "Origin",
+            "Date",
+            "Mon, 13 Feb 2023 05:55:45 GMT",
+            "Content-Length",
+            "40",
+            "Via",
+            "1.1 google",
+            "Alt-Svc",
+            "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+            "Connection",
+            "close"
+        ],
+        "responseIsBinary": false
+    },
+    {
+        "scope": "https://rpc.tenderly.co:443",
+        "method": "POST",
+        "path": "/fork/38655d0a-4d2e-4b54-aa49-042a113a24ed",
+        "body": {
+            "method": "eth_call",
+            "params": [
+                {
+                    "to": "0xca11bde05977b3631167028862be2a173976ca11",
+                    "data": "0x252dba42000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000020000000000000000000000000d96f48665a1410c0cd669a88898eca36b9fc2cce000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000247ecebe0000000000000000000000000099459a327e2e1f7535501aff6a1aada7024c45fd00000000000000000000000000000000000000000000000000000000"
+                },
+                "latest"
+            ],
+            "id": 44,
+            "jsonrpc": "2.0"
+        },
+        "status": 200,
+        "response": {
+            "id": 44,
+            "jsonrpc": "2.0",
+            "result": "0x0000000000000000000000000000000000000000000000000000000000fd910a00000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000002"
+        },
+        "rawHeaders": [
+            "Content-Type",
+            "application/json",
+            "Head",
+            "",
+            "Vary",
+            "Origin",
+            "Date",
+            "Mon, 13 Feb 2023 05:55:45 GMT",
+            "Content-Length",
+            "423",
+            "Via",
+            "1.1 google",
+            "Alt-Svc",
+            "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+            "Connection",
+            "close"
+        ],
+        "responseIsBinary": false
+    }
+]

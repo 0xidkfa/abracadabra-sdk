@@ -1,14 +1,14 @@
 import { BigNumber, Signer, providers, Wallet, ethers } from 'ethers';
 import { Abracadabra } from '../client';
-import { Vault } from '../contracts';
+import { BentoBox } from '../contracts';
 
 export class SignatureCollector {
-  private vault: Vault;
+  private bentoBox: BentoBox;
   private signer: Signer;
   private chainId: number;
 
-  public constructor(client: Abracadabra, vault: Vault) {
-    this.vault = vault;
+  public constructor(client: Abracadabra, bentoBox: BentoBox) {
+    this.bentoBox = bentoBox;
     this.signer = client.signer()!;
     this.chainId = client.chain().chainId;
   }
@@ -17,7 +17,7 @@ export class SignatureCollector {
     return {
       name: 'BentoBox V1',
       chainId: this.chainId,
-      verifyingContract: this.vault.contractAddress,
+      verifyingContract: this.bentoBox.contractAddress,
     };
   }
 
@@ -37,20 +37,23 @@ export class SignatureCollector {
     return {
       warning: 'Give FULL access to funds in (and approved to) BentoBox?',
       user: await this.signer.getAddress(),
-      masterContract: this.vault.contractAddress,
+      masterContract: this.bentoBox.contractAddress,
       approved: true,
       nonce: await this.getNonce(),
     };
   }
 
   public async getNonce(): Promise<string> {
-    console.log(await this.signer.getAddress());
-    const nonces = await this.vault.nonces(await this.signer.getAddress());
+    const nonces = await this.bentoBox.nonces(await this.signer.getAddress());
     return nonces.toString();
   }
 
   public async signature(): Promise<string> {
-    return (this.signer as Wallet)._signTypedData(await this.getDomain(), this.getTypes(), await this.getValues());
+    return (this.signer as Wallet)._signTypedData(
+      await this.getDomain(),
+      this.getTypes(),
+      await this.getValues()
+    );
   }
 
   public async parsedSignature(): Promise<{ r: string; s: string; v: number }> {

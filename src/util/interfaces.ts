@@ -1,11 +1,15 @@
 import { ContractInterface } from 'ethers';
+import { BigNumber } from 'ethers';
+import { Token, BentoBox } from '../contracts';
 
 export enum ChainSymbol {
-  eth = 'eth',
-  //   bnb = 'bnb',
-  //   avax = 'avax',
-  //   op = 'op',
-  //   arbi = 'arbi',
+  ethereum = 'ethereum',
+  binance = 'binance',
+  avalanche = 'avalanche',
+  optimism = 'optimism',
+  arbitrum = 'arbitrum',
+  fantom = 'fantom',
+  polygon = 'polygon',
 }
 
 export type ChainOptions = {
@@ -18,6 +22,7 @@ export interface ChainConfig {
   mimToken: string;
   spellToken?: string;
   sSpellToken?: string;
+  marketLens: string;
 }
 
 export interface AbracadabraConfig {
@@ -30,17 +35,40 @@ export interface AbracadabraConfig {
 export interface MarketConfig {
   name: string;
   cauldron: CauldronConfig;
-  oracle: AddressConfig;
-  leverageSwapper: AddressConfig;
-  liquidationSwapper: AddressConfig;
   strategy?: AddressConfig;
 }
 
 export interface CauldronConfig {
   contractAddress: string;
   abi: ContractInterface;
+  version: number;
 }
 
 export interface AddressConfig {
   contractAddress: string;
+}
+
+export interface AmountValue {
+  amount: BigNumber;
+  value: BigNumber;
+}
+
+export interface UserPosition {
+  ltvBps: BigNumber;
+  borrowValue: BigNumber;
+  collateralValue: AmountValue;
+  liquidationPrice: BigNumber;
+}
+
+export interface MarketInfo {
+  borrowFee: BigNumber;
+  maximumCollateralRatio: BigNumber;
+  liquidationFee: BigNumber;
+  interestPerYear: BigNumber;
+  marketMaxBorrow: BigNumber;
+  userMaxBorrow: BigNumber;
+  totalBorrowed: BigNumber;
+  oracleExchangeRate: BigNumber;
+  collateralPrice: BigNumber;
+  totalCollateral: AmountValue;
 }

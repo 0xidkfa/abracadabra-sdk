@@ -2,11 +2,12 @@ import { assert } from 'chai';
 import { BigNumber, ethers, Wallet } from 'ethers';
 import { SignatureCollector } from '../../src/models/SignatureCollector';
 import nock from 'nock';
-import { Vault } from '../../src/contracts';
+import { BentoBox } from '../../src/contracts';
 import Sinon, * as sinon from 'sinon';
 import { TEST_PRIVATE_KEY } from '../constants';
 import { Abracadabra } from '../../src/client';
-import { ChainSymbol } from '../../src/util/interfaces';
+import { ChainConfig } from '../../src/util/interfaces';
+import { EthersMulticall } from '@morpho-labs/ethers-multicall';
 // import { nockBack } from './testHelper';
 
 describe('SignatureCollector', () => {
@@ -17,12 +18,20 @@ describe('SignatureCollector', () => {
     nock.back.fixtures = __dirname + '/fixtures/SignatureCollector';
     nock.back.setMode('record');
 
-    let provider = new ethers.providers.JsonRpcProvider('https://virginia.rpc.blxrbdn.com');
-    abracadabra = new Abracadabra(ChainSymbol.eth, { signer: new Wallet(TEST_PRIVATE_KEY).connect(provider) });
+    let provider = new ethers.providers.JsonRpcProvider(
+      process.env.TENDERLY_TEST_FORK
+    );
+
+    abracadabra = Sinon.createStubInstance(Abracadabra, {
+      // BLOCK: 16432742
+      chain: { chainId: 1 } as ChainConfig,
+      multicall: new EthersMulticall(provider),
+      signer: new Wallet(TEST_PRIVATE_KEY).connect(provider),
+    });
 
     collector = new SignatureCollector(
       abracadabra,
-      new Vault(abracadabra, '0xd96f48665a1410C0cd669A88898ecA36B9Fc2cce')
+      new BentoBox(abracadabra, '0xd96f48665a1410C0cd669A88898ecA36B9Fc2cce')
     );
   });
 

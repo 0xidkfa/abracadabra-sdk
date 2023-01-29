@@ -38,3 +38,11 @@ let abracadabra = new Abracadabra(ChainSymbol.eth, { signer: wallet });
 let market = abracadabra.markets['crv']
 console.log('TVL: ', (await market.tvl()).toString())
 ```
+
+# Testing
+
+Tests are done on a Tenderly fork with the block set to 16432742. Test can be run with:
+
+```
+npm run test
+```

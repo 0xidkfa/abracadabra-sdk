@@ -1,10 +1,16 @@
 // import { Environment } from '../util/interfaces';
 import { ethers } from 'ethers';
-import { ChainOptions, MarketConfig, ChainConfig, ChainSymbol } from '../util/interfaces';
+import {
+  ChainOptions,
+  MarketConfig,
+  ChainConfig,
+  ChainSymbol,
+} from '../util/interfaces';
 import { DEFAULT_CHAIN_OPTIONS } from '../configs/defaultConfig';
 import { Cauldron } from '../contracts/Cauldron';
 import _ = require('underscore');
 import { Market } from '../models';
+import { EthersMulticall } from '@morpho-labs/ethers-multicall';
 
 export interface ClientConfig {
   provider: ethers.providers.BaseProvider;
@@ -13,19 +19,24 @@ export interface ClientConfig {
 }
 
 export { ChainSymbol };
-export type { ChainConfig };
+export type { ChainConfig, Market };
 
 export class Abracadabra {
   markets: {
     [symbol: string]: Market;
   };
   clientOptions;
-  private chainConfig: ChainConfig;
+  multicallCache: EthersMulticall;
+  chainConfig: ChainConfig;
 
   constructor(chain: ChainSymbol, options: Partial<ClientConfig> = {}) {
-    this.clientOptions = { ...DEFAULT_CHAIN_OPTIONS[ChainSymbol[chain]], ...options };
+    this.clientOptions = {
+      ...DEFAULT_CHAIN_OPTIONS[ChainSymbol[chain]],
+      ...options,
+    };
     this.chainConfig = this.clientOptions.chain!;
     this.markets = {};
+    this.multicallCache = this.multicall();
 
     if (this.clientOptions && this.clientOptions.markets)
       Object.entries(this.clientOptions.markets).forEach((keyval) => {
@@ -36,8 +47,18 @@ export class Abracadabra {
       });
   }
 
+  multicall(): EthersMulticall {
+    return new EthersMulticall(
+      this.providerOrSigner() as ethers.providers.Provider
+    );
+  }
+
   providerOrSigner(): ethers.Signer | ethers.providers.Provider {
     return this.signer() || this.clientOptions.provider!;
+  }
+
+  marketLens(): string {
+    return this.chainConfig.marketLens;
   }
 
   signer() {

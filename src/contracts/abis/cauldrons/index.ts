@@ -1,5 +1,3 @@
-import CauldronLowRiskV1 from './CauldronLowRiskV1.json';
-import CauldronMediumRiskV1 from './CauldronMediumRiskV1.json';
 import CauldronV2Flat from './CauldronV2Flat.json';
 import CauldronV2 from './CauldronV2.json';
 import CauldronV2CheckpointV1 from './CauldronV2CheckpointV1.json';
@@ -12,8 +10,6 @@ import CauldronV4 from './CauldronV4.json';
 import PrivilegedCauldronV4 from './PrivilegedCauldronV4.json';
 
 export {
-  CauldronLowRiskV1,
-  CauldronMediumRiskV1,
   CauldronV2Flat,
   CauldronV2CheckpointV1,
   CauldronV2,

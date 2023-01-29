@@ -4,6 +4,7 @@ import { Token } from '../../src/contracts/index';
 import nock from 'nock';
 import { Abracadabra } from '../../src/client';
 import Sinon from 'sinon';
+import { EthersMulticall } from '@morpho-labs/ethers-multicall';
 
 describe('Token', () => {
   var token: Token;
@@ -13,11 +14,19 @@ describe('Token', () => {
     nock.back.fixtures = __dirname + '/fixtures/token';
     nock.back.setMode('record');
 
+    let provider = new ethers.providers.JsonRpcProvider(
+      process.env.TENDERLY_TEST_FORK
+    );
+
     abracadabra = Sinon.createStubInstance(Abracadabra, {
-      providerOrSigner: new ethers.providers.JsonRpcProvider('https://virginia.rpc.blxrbdn.com'),
+      multicall: new EthersMulticall(provider),
+      providerOrSigner: provider,
     });
 
-    token = new Token(abracadabra, '0x99D8a9C45b2ecA8864373A26D1459e3Dff1e17F3');
+    token = new Token(
+      abracadabra,
+      '0x99D8a9C45b2ecA8864373A26D1459e3Dff1e17F3'
+    );
   });
 
   describe('#decimals', () => {

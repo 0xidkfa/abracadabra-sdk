@@ -1,4 +1,4 @@
-export * from './Vault';
+export * from './BentoBox';
 export * from './Cauldron';
 export * from './Oracle';
 export * from './Token';

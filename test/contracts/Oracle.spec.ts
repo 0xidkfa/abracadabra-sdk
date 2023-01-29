@@ -6,6 +6,7 @@ import { Abracadabra } from '../../src/client';
 import { TEST_PRIVATE_KEY, RecursivePartial } from '../constants';
 import sinon from 'sinon';
 import { MarketConfig } from '../../src/util/interfaces';
+import { EthersMulticall } from '@morpho-labs/ethers-multicall';
 
 describe('Oracle', () => {
   var oracle: Oracle;
@@ -15,14 +16,19 @@ describe('Oracle', () => {
     nock.back.fixtures = __dirname + '/fixtures/oracle';
     nock.back.setMode('record');
 
+    let provider = new ethers.providers.JsonRpcProvider(
+      process.env.TENDERLY_TEST_FORK
+    );
+
     abracadabra = sinon.createStubInstance(Abracadabra, {
-      providerOrSigner: new ethers.providers.JsonRpcProvider('https://virginia.rpc.blxrbdn.com'),
+      multicall: new EthersMulticall(provider),
+      providerOrSigner: provider,
     });
 
-    let mockMarketConfig: RecursivePartial<MarketConfig> = {
-      oracle: { contractAddress: '0xfa267599bc504a60806b24656495d89064cbd972' },
-    };
-    oracle = new Oracle(abracadabra, mockMarketConfig as MarketConfig);
+    oracle = new Oracle(
+      abracadabra,
+      '0xfa267599bc504a60806b24656495d89064cbd972'
+    );
   });
 
   describe('#name', () => {
@@ -36,7 +42,9 @@ describe('Oracle', () => {
 
   describe('#oracleImplementation', () => {
     it('should return the oracleImplementation of the oracle', async () => {
-      const { nockDone, context } = await nock.back('oracleImplementation.json');
+      const { nockDone, context } = await nock.back(
+        'oracleImplementation.json'
+      );
       let response = await oracle.oracleImplementation();
       assert.equal(response, '0xEAE4365F8714b8FDC66eD0F2A3D90338C9dD84eB');
       nockDone();
@@ -56,7 +64,7 @@ describe('Oracle', () => {
     it('should return the peek of the oracle', async () => {
       const { nockDone, context } = await nock.back('peek.json');
       let [bool, response] = await oracle.peek('0x00');
-      assert.deepEqual(response, BigNumber.from('737645081381313'));
+      assert.deepEqual(response.toString(), '636140707176367');
       nockDone();
     });
   });
@@ -65,7 +73,7 @@ describe('Oracle', () => {
     it('should return the peekSpot of the oracle', async () => {
       const { nockDone, context } = await nock.back('peekSpot.json');
       let response = await oracle.peekSpot('0x00');
-      assert.deepEqual(response, BigNumber.from('737645081381313'));
+      assert.deepEqual(response.toString(), '636140707176367');
       nockDone();
     });
   });
