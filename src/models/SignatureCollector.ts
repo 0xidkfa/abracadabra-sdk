@@ -1,4 +1,4 @@
-import { BigNumber, Signer, providers, Wallet } from 'ethers';
+import { BigNumber, Signer, providers, Wallet, ethers } from 'ethers';
 import { Abracadabra } from '../client';
 import { Vault } from '../contracts';
 
@@ -9,7 +9,7 @@ export class SignatureCollector {
 
   public constructor(client: Abracadabra, vault: Vault) {
     this.vault = vault;
-    this.signer = client.signer!;
+    this.signer = client.signer()!;
     this.chainId = client.chain().chainId;
   }
 

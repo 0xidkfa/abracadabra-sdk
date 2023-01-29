@@ -117,7 +117,7 @@ export class Cauldron extends ContractBase {
 
     console.log(estimateGas.toString());
 
-    return await this.contract.connect(this.client.signer).cook(
+    return await this.contract.connect(this.client.signer()!).cook(
       map(actions, (action) => action.actionId()),
       map(actions, (action) => action.value()),
       map(actions, (action) => action.data())

@@ -12,6 +12,9 @@ export interface ClientConfig {
   chains: ChainConfig; // after picking specific chain...
 }
 
+export { ChainSymbol };
+export type { ChainConfig };
+
 export class Abracadabra {
   markets: {
     [symbol: string]: Market;

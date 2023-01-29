@@ -2,8 +2,10 @@
   "name": "abracadabra-sdk",
   "version": "1.0.0",
   "description": "SDK to interact with Abracadabra smart contracts.",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
+    "pack": "rm -f *.tgz && tsc && npm pack",
     "test": "mocha 'test/**/*.ts' --require ts-node/register --recursive --timeout 60000 --exit"
   },
   "author": "",
@@ -24,5 +26,8 @@
     "mocha": "^10.2.0",
     "nock": "^13.2.9",
     "sinon": "^15.0.1"
-  }
+  },
+  "files": [
+    "dist"
+  ]
 }
