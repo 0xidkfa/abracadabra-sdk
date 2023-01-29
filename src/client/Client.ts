@@ -36,8 +36,8 @@ export class Abracadabra {
       });
   }
 
-  providerOrSigner() {
-    return this.signer() || this.clientOptions.provider;
+  providerOrSigner(): ethers.Signer | ethers.providers.Provider {
+    return this.signer() || this.clientOptions.provider!;
   }
 
   signer() {

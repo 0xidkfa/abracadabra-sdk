@@ -53,24 +53,24 @@ export class Cauldron extends ContractBase {
   // TODO: #borrowLimit
 
   public async collateral(): Promise<Token> {
-    this.cachedCollateral ||= new Token(this.client, await this.contract.collateral());
+    this.cachedCollateral ||= new Token(this.client, await this.multicallContract.collateral());
     return this.cachedCollateral;
   }
 
   public async exchangeRate(): Promise<BigNumber> {
-    return await this.contract.exchangeRate();
+    return await this.multicallContract.exchangeRate();
   }
 
   public async feeTo(): Promise<string> {
-    return await this.contract.feeTo();
+    return await this.multicallContract.feeTo();
   }
 
   public async magicInternetMoney(): Promise<string> {
-    return await this.contract.magicInternetMoney();
+    return await this.multicallContract.magicInternetMoney();
   }
 
   public async masterContract(): Promise<string> {
-    return await this.contract.masterContract();
+    return await this.multicallContract.masterContract();
   }
 
   public async oracle(): Promise<Oracle> {
@@ -79,33 +79,33 @@ export class Cauldron extends ContractBase {
   }
 
   public async oracleData(): Promise<string> {
-    return await this.contract.oracleData();
+    return await this.multicallContract.oracleData();
   }
 
   public async owner(): Promise<string> {
-    return await this.contract.owner();
+    return await this.multicallContract.owner();
   }
 
   public async pendingOwner(): Promise<string> {
-    return await this.contract.pendingOwner();
+    return await this.multicallContract.pendingOwner();
   }
 
   public async totalBorrow(): Promise<{ elastic: BigNumber; base: BigNumber }> {
     // Base is the initial borrow amount
     // Elastic is what is actually owed with interest
-    return await this.contract.totalBorrow();
+    return await this.multicallContract.totalBorrow();
   }
 
   public async totalCollateralShare(): Promise<BigNumber> {
-    return await this.contract.totalCollateralShare();
+    return await this.multicallContract.totalCollateralShare();
   }
 
   public async userBorrowPart(address: string): Promise<BigNumber> {
-    return await this.contract.userBorrowPart(address);
+    return await this.multicallContract.userBorrowPart(address);
   }
 
   public async userCollateralShare(address: string): Promise<BigNumber> {
-    return await this.contract.userCollateralShare(address);
+    return await this.multicallContract.userCollateralShare(address);
   }
 
   public async cook(actions: Array<ActionBase>) {
