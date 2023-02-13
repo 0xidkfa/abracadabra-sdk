@@ -36,12 +36,14 @@ let wallet = ethers.Wallet.createRandom().connect(provider);
 let abracadabra = new Abracadabra(ChainSymbol.eth, { signer: wallet });
 
 let market = abracadabra.markets['crv']
-console.log('TVL: ', (await market.tvl()).toString())
+let marketInfo = await market.getMarketInfo();
+console.log(marketInfo.totalCollateral.value.toString())
+// 5599744955230399650578728 = $5.6M
 ```
 
 # Testing
 
-Tests are done on a Tenderly fork with the block set to 16432742. Test can be run with:
+Tests are done on a Tenderly fork with the block set to 16617737. Test can be run with:
 
 ```
 npm run test
