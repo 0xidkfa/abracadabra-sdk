@@ -1,7 +1,6 @@
 import { BigNumber, ethers, Wallet } from 'ethers';
 import { Abracadabra, Market } from '../src';
 import { ChainSymbol } from '../src/util/interfaces';
-import { TEST_PRIVATE_KEY } from '../test/constants';
 import _ from 'underscore';
 require('dotenv').config();
 

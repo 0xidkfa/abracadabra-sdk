@@ -28,7 +28,7 @@ npm install abracadabra-sdk
 
 First, a client instance is needed in order to begin interacting with the Abracadabra smart contracts. The Abracadabra client can be initialized as follows:
 
-```
+```ts
 import { ethers } from 'ethers';
 import { Abracadabra } from './src';
 import { ChainSymbol } from './src/util/interfaces';
@@ -41,11 +41,11 @@ const client = new Abracadabra(ChainSymbol.ethereum, { provider: provider });
 
 Once initialized, the client can be used to query market information. Queries use multicall functionality to batch queries in a single request. This reduces the number of RPC calls being made to nodes.
 
-```
+```ts
 let market = client.markets['wbtc'];
 let marketInfo = await market.getMarketInfo();
 
-console.log(marketInfo.totalCollateral.value.toString())
+console.log(marketInfo.totalCollateral.value.toString());
 // 5599744955230399650578728 = $5.6M
 ```
 
@@ -53,7 +53,7 @@ console.log(marketInfo.totalCollateral.value.toString())
 
 The client can also help you structure a cook call to interact with the protocol. For some example recipes, please see the `examples` folder. Here is what a function to deposit collateral into a cauldron might look like:
 
-```
+```ts
 async function simpleDeposit(market: Market) {
   let cauldron = market.cauldron;
   let [bentoBox, collateral, masterContract, signatureCollector] = await Promise.all([

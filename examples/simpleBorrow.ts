@@ -1,14 +1,13 @@
 import { BigNumber, ethers, Wallet } from 'ethers';
 import { Abracadabra, Market } from '../src';
 import { ChainSymbol } from '../src/util/interfaces';
-import { TEST_PRIVATE_KEY } from '../test/constants';
 import _ from 'underscore';
 import { UpdateRate, BentoSetApproval, Borrow, BentoWithdraw } from '../src/models/cookActions';
 import { expandDecimals } from '../src/util/helpers';
 require('dotenv').config();
 
 const provider = new ethers.providers.JsonRpcProvider(process.env.TENDERLY_TEST_FORK);
-const wallet = new Wallet(TEST_PRIVATE_KEY).connect(provider);
+const wallet = new Wallet(process.env.TEST_PRIVATE_KEY!).connect(provider);
 const client = new Abracadabra(ChainSymbol.ethereum, {
   signer: wallet,
 });
