@@ -24,21 +24,62 @@ npm install abracadabra-sdk
 
 # Usage
 
-The Abracadabra client can be initialized as follows:
+## Initializing the client
+
+First, a client instance is needed in order to begin interacting with the Abracadabra smart contracts. The Abracadabra client can be initialized as follows:
 
 ```
 import { ethers } from 'ethers';
 import { Abracadabra } from './src';
 import { ChainSymbol } from './src/util/interfaces';
 
-let provider = new ethers.providers.JsonRpcProvider(PROVIDER_URL);
-let wallet = ethers.Wallet.createRandom().connect(provider);
-let abracadabra = new Abracadabra(ChainSymbol.eth, { signer: wallet });
+const provider = new ethers.providers.JsonRpcProvider(process.env.TENDERLY_TEST_FORK);
+const client = new Abracadabra(ChainSymbol.ethereum, { provider: provider });
+```
 
-let market = abracadabra.markets['crv']
+## Querying market information
+
+Once initialized, the client can be used to query market information. Queries use multicall functionality to batch queries in a single request. This reduces the number of RPC calls being made to nodes.
+
+```
+let market = client.markets['wbtc'];
 let marketInfo = await market.getMarketInfo();
+
 console.log(marketInfo.totalCollateral.value.toString())
 // 5599744955230399650578728 = $5.6M
+```
+
+## Writing a cook
+
+The client can also help you structure a cook call to interact with the protocol. For some example recipes, please see the `examples` folder. Here is what a function to deposit collateral into a cauldron might look like:
+
+```
+async function simpleDeposit(market: Market) {
+  let cauldron = market.cauldron;
+  let [bentoBox, collateral, masterContract, signatureCollector] = await Promise.all([
+    cauldron.bentoBox(),
+    cauldron.collateral(),
+    cauldron.masterContract(),
+    market.getSignatureCollector(),
+  ]);
+
+  console.log('Balance of wallet: ', (await collateral.balanceOf(wallet.address)).toString());
+
+  // Deposit 0.1 (~$100) of yv-3Crypto
+  const depositAmount = expandDecimals(17);
+
+  // First, approve the BentoBox to spend the collateral.
+  await collateral.approve(bentoBox.contractAddress, depositAmount.mul(1000));
+
+  // Next, create the set of cook actions.
+  let actions = [
+    new BentoSetApproval(masterContract, wallet.address, await signatureCollector.parsedSignature()),
+    new BentoDeposit(collateral.contractAddress, wallet.address, depositAmount),
+    new AddCollateral(wallet.address, false),
+  ];
+
+  await cauldron.cook(actions);
+}
 ```
 
 # Testing
