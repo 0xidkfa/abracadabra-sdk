@@ -1,16 +1,22 @@
 import { BigNumber, Signer, providers, Wallet, ethers } from 'ethers';
 import { Abracadabra } from '../client';
-import { BentoBox } from '../contracts';
+import { type BentoBox } from '../contracts';
 
 export class SignatureCollector {
   private bentoBox: BentoBox;
   private signer: Signer;
   private chainId: number;
+  private masterContract: string;
 
-  public constructor(client: Abracadabra, bentoBox: BentoBox) {
+  public constructor(
+    client: Abracadabra,
+    bentoBox: BentoBox,
+    masterContract: string
+  ) {
     this.bentoBox = bentoBox;
     this.signer = client.signer()!;
     this.chainId = client.chain().chainId;
+    this.masterContract = masterContract;
   }
 
   async getDomain() {
@@ -37,7 +43,7 @@ export class SignatureCollector {
     return {
       warning: 'Give FULL access to funds in (and approved to) BentoBox?',
       user: await this.signer.getAddress(),
-      masterContract: this.bentoBox.contractAddress,
+      masterContract: this.masterContract,
       approved: true,
       nonce: await this.getNonce(),
     };

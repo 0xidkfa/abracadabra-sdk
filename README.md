@@ -1,6 +1,6 @@
 # Unofficial Abracadabra SDK
 
-`abracadabra-money.js` is a JavaScript SDK for writing applications that interact with the Abracadabra cauldron contracts. This SDK provides a layer of abstraction around querying the contracts and constructing positions on the blockchain.
+`abracadabra-sdk` is a JavaScript SDK for writing applications that interact with the Abracadabra cauldron contracts. This SDK provides a layer of abstraction around querying the contracts and constructing positions on the blockchain.
 
 This SDK aims to make it simple for developers to query contracts and answer questions like:
 
@@ -16,10 +16,10 @@ This SDK also aims to make it easier for developers to execute actions such as:
 
 # Installation
 
-TODO: You can install the latest version of `abracadabra-money.js` through npm:
+TODO: You can install the latest version of `abracadabra-sdk` through npm:
 
 ```
-npm install abracadabra-money.js
+npm install abracadabra-sdk
 ```
 
 # Usage

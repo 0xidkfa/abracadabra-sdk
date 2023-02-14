@@ -11,6 +11,7 @@ import { Cauldron } from '../contracts/Cauldron';
 import _ = require('underscore');
 import { Market } from '../models';
 import { EthersMulticall } from '@morpho-labs/ethers-multicall';
+import { SignatureCollector } from '../models/SignatureCollector';
 
 export interface ClientConfig {
   provider: ethers.providers.BaseProvider;

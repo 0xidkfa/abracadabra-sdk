@@ -1,13 +1,20 @@
+import { BigNumber } from 'ethers';
 import { ActionBase } from './ActionBase';
 
 export class AddCollateral extends ActionBase {
-  private amount: number;
   private userAddr: string;
+  private share: BigNumber;
+  private skim: Boolean;
 
-  constructor(amount: number, userAddr: string) {
+  constructor(
+    userAddr: string,
+    skim: Boolean = false,
+    share: BigNumber = BigNumber.from('-2')
+  ) {
     super();
-    this.amount = amount;
     this.userAddr = userAddr;
+    this.share = share;
+    this.skim = skim;
   }
 
   public actionId(): number {
@@ -19,6 +26,6 @@ export class AddCollateral extends ActionBase {
   }
 
   public signatureValues(): Array<any> {
-    return ['-2', this.userAddr, true];
+    return [this.share, this.userAddr, this.skim];
   }
 }

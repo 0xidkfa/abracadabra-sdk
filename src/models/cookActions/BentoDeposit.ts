@@ -7,7 +7,12 @@ export class BentoDeposit extends ActionBase {
   private collateralAmount: BigNumber;
   private share: BigNumber;
 
-  constructor(tokenAddr: string, userAddr: string, collateralAmount: BigNumber, share: BigNumber = BigNumber.from(0)) {
+  constructor(
+    tokenAddr: string,
+    userAddr: string,
+    collateralAmount: BigNumber,
+    share: BigNumber = BigNumber.from(0)
+  ) {
     super();
     this.tokenAddr = tokenAddr;
     this.userAddr = userAddr;

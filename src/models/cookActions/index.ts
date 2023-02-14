@@ -10,3 +10,4 @@ export * from './Borrow';
 export * from './RemoveCollateral';
 export * from './Repay';
 export * from './RepayShare';
+export * from './UpdateRate';

@@ -20,7 +20,8 @@ export class BentoBox extends ContractBase {
     return await this.multicallContract.nonces(walletAddress);
   }
 
-  public async balanceOf(tokenAddress: string, marketAddress: string) {
-    return await this.multicallContract.balanceOf(tokenAddress, marketAddress);
+  // Return shares of a token (e.g., collateral) in a given cauldron.
+  public async balanceOf(tokenAddress: string, ownerAddress: string) {
+    return await this.multicallContract.balanceOf(tokenAddress, ownerAddress);
   }
 }

@@ -13,8 +13,6 @@ import { ActionBase } from '../models/cookActions/ActionBase';
 import { map } from 'underscore';
 import { ChainConfig, MarketConfig } from '../util/interfaces';
 import { Abracadabra } from '../client';
-import { Market } from '../models';
-import { expandDecimals, multicall } from '../util/helpers';
 
 interface AccrueInfo {
   lastAccrued: BigNumber;
@@ -132,6 +130,10 @@ export class Cauldron extends ContractBase {
   }
 
   public async cook(actions: Array<ActionBase>) {
+    console.log(map(actions, (action) => action.actionId()));
+    console.log(map(actions, (action) => action.value()));
+    console.log(map(actions, (action) => action.data()));
+
     const estimateGas = await this.contract.estimateGas.cook(
       map(actions, (action) => action.actionId()),
       map(actions, (action) => action.value()),
@@ -143,7 +145,7 @@ export class Cauldron extends ContractBase {
     return await this.contract.connect(this.client.signer()!).cook(
       map(actions, (action) => action.actionId()),
       map(actions, (action) => action.value()),
-      map(actions, (action) => action.data(), { estimateGas })
+      map(actions, (action) => action.data())
     );
   }
 }

@@ -9,21 +9,19 @@ interface TokenData {
 }
 
 export class Token extends ContractBase {
-  cachedData?: TokenData;
-
   public constructor(client: Abracadabra, contractAddress: string) {
     super({ client, contractAddress, abi: erc20Abi });
   }
 
-  public async sync(): Promise<TokenData> {
-    this.cachedData = (await multicall({
-      decimals: this.decimals(),
-    })) as TokenData;
-
-    return this.cachedData;
+  public async decimals(): Promise<number> {
+    return await this.multicallContract.decimals();
   }
 
-  public async decimals(): Promise<number> {
-    return this.cachedData?.decimals || (await this.multicallContract.decimals());
+  public async balanceOf(address: string): Promise<BigNumber> {
+    return await this.multicallContract.balanceOf(address);
+  }
+
+  public async approve(spenderAddress: string, value: BigNumber) {
+    return await this.multicallContract.approve(spenderAddress, value);
   }
 }
