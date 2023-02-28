@@ -9,6 +9,7 @@ export const POLYGON_CHAIN_OPTIONS: AbracadabraConfig = {
     spellToken: '',
     sSpellToken: '',
     marketLens: '0xe0ee02485ca907754b3a63c03f1aa6f0c7443085',
+    defaultRpc: 'https://rpc.tenderly.co/fork/6b0f73b2-8f18-4866-b1bd-d723e0c715f5',
   },
   markets: {
     matic: {

@@ -9,6 +9,7 @@ export const ARBITRUM_CHAIN_OPTIONS: AbracadabraConfig = {
     spellToken: '',
     sSpellToken: '',
     marketLens: '0xe0ee02485ca907754b3a63c03f1aa6f0c7443085',
+    defaultRpc: 'https://rpc.tenderly.co/fork/c672a466-3002-46d3-8c0d-964ab79b0551',
   },
   markets: {
     weth: {

@@ -9,6 +9,7 @@ export const FANTOM_CHAIN_OPTIONS: AbracadabraConfig = {
     spellToken: '',
     sSpellToken: '',
     marketLens: '0xe0ee02485ca907754b3a63c03f1aa6f0c7443085',
+    defaultRpc: 'https://rpc.tenderly.co/fork/c832a937-d4ea-47a8-95c4-4f6c85349074',
   },
   markets: {
     wftm: {

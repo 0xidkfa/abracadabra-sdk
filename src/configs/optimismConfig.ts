@@ -9,6 +9,7 @@ export const OPTIMISM_CHAIN_OPTIONS: AbracadabraConfig = {
     spellToken: '',
     sSpellToken: '',
     marketLens: '0xe0ee02485ca907754b3a63c03f1aa6f0c7443085',
+    defaultRpc: 'https://rpc.tenderly.co/fork/611f31c4-51c0-456b-b0e0-470666ed3113',
   },
   markets: {
     'velo-op-usdc': {

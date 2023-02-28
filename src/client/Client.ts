@@ -48,7 +48,11 @@ export class Abracadabra {
   }
 
   providerOrSigner(): ethers.Signer | ethers.providers.Provider {
-    return this.signer() || this.clientOptions.provider!;
+    return (
+      this.signer() ||
+      this.clientOptions.provider ||
+      new ethers.providers.JsonRpcProvider(this.clientOptions.chain?.defaultRpc)
+    );
   }
 
   marketLens(): string {

@@ -23,8 +23,8 @@ export class Market {
     this.marketLens = new MarketLens(this.client, this.marketConfig);
   }
 
-  async getMarketInfo(): Promise<MarketInfo> {
-    return await this.marketLens.getMarketInfo();
+  async getMarketInfo(blockNumber?: number): Promise<MarketInfo> {
+    return await this.marketLens.getMarketInfo(blockNumber);
   }
 
   async getUserPosition(wallet: string): Promise<UserPosition> {

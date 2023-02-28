@@ -1,12 +1,5 @@
 import { ContractBase } from './ContractBase';
-import {
-  BigNumber,
-  Contract,
-  ethers,
-  Signer,
-  ContractInterface,
-  utils,
-} from 'ethers';
+import { BigNumber, Contract, ethers, Signer, ContractInterface, utils } from 'ethers';
 import { SECONDS_PER_YEAR } from '../util/constants';
 import { BentoBox, Oracle, Token } from './index';
 import { ActionBase } from '../models/cookActions/ActionBase';
@@ -57,10 +50,7 @@ export class Cauldron extends ContractBase {
   }
 
   public async bentoBox(): Promise<BentoBox> {
-    this.cachedBentoBox ||= new BentoBox(
-      this.client,
-      await this.multicallContract.bentoBox()
-    );
+    this.cachedBentoBox ||= new BentoBox(this.client, await this.multicallContract.bentoBox());
 
     return this.cachedBentoBox;
   }
@@ -68,10 +58,7 @@ export class Cauldron extends ContractBase {
   // TODO: #borrowLimit
 
   public async collateral(): Promise<Token> {
-    this.cachedCollateral ||= new Token(
-      this.client,
-      await this.multicallContract.collateral()
-    );
+    this.cachedCollateral ||= new Token(this.client, await this.multicallContract.collateral());
     return this.cachedCollateral;
   }
 
@@ -92,10 +79,7 @@ export class Cauldron extends ContractBase {
   }
 
   public async oracle(): Promise<Oracle> {
-    this.cachedOracle ||= new Oracle(
-      this.client,
-      await this.multicallContract.oracle()
-    );
+    this.cachedOracle ||= new Oracle(this.client, await this.multicallContract.oracle());
     return this.cachedOracle;
   }
 
@@ -111,10 +95,10 @@ export class Cauldron extends ContractBase {
     return await this.multicallContract.pendingOwner();
   }
 
-  public async totalBorrow(): Promise<{ elastic: BigNumber; base: BigNumber }> {
+  public async totalBorrow(blockNumber?: number): Promise<{ elastic: BigNumber; base: BigNumber }> {
     // Base is the initial borrow amount
     // Elastic is what is actually owed with interest
-    return await this.multicallContract.totalBorrow();
+    return await this.multicallContract.totalBorrow({ blockTag: blockNumber });
   }
 
   public async totalCollateralShare(): Promise<BigNumber> {
