@@ -23,6 +23,7 @@ export interface ChainConfig {
   spellToken?: string;
   sSpellToken?: string;
   marketLens: string;
+  defaultRpc?: string;
 }
 
 export interface AbracadabraConfig {

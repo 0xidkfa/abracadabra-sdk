@@ -9,6 +9,7 @@ export const AVALANCHE_CHAIN_OPTIONS: AbracadabraConfig = {
     spellToken: '',
     sSpellToken: '',
     marketLens: '0xe0ee02485ca907754b3a63c03f1aa6f0c7443085',
+    defaultRpc: 'https://rpc.tenderly.co/fork/4853227b-91c1-48af-8d2b-85ace894c96d',
   },
   markets: {
     wavax: {

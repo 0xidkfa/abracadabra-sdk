@@ -9,6 +9,7 @@ export const BSC_CHAIN_OPTIONS: AbracadabraConfig = {
     spellToken: '',
     sSpellToken: '',
     marketLens: '0xe0ee02485ca907754b3a63c03f1aa6f0c7443085',
+    defaultRpc: 'https://rpc.tenderly.co/fork/8bc3dd2e-260f-4240-bb3b-6a11bac6dc23',
   },
   markets: {
     wbnb: {

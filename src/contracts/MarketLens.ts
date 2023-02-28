@@ -57,14 +57,16 @@ export class MarketLens extends ContractBase {
     return await this.multicallContract.getLiquidationFee(this.cauldronAddress);
   }
 
-  public async getMarketInfo(): Promise<MarketInfo> {
+  public async getMarketInfo(blockNumber?: number): Promise<MarketInfo> {
     if (this.cauldronConfig.version >= 3) {
       return await this.multicallContract.getMarketInfoCauldronV3(
-        this.cauldronAddress
+        this.cauldronAddress,
+        { blockTag: blockNumber }
       );
     } else {
       return await this.multicallContract.getMarketInfoCauldronV2(
-        this.cauldronAddress
+        this.cauldronAddress,
+        { blockTag: blockNumber }
       );
     }
   }

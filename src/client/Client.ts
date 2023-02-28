@@ -1,11 +1,6 @@
 // import { Environment } from '../util/interfaces';
 import { ethers } from 'ethers';
-import {
-  ChainOptions,
-  MarketConfig,
-  ChainConfig,
-  ChainSymbol,
-} from '../util/interfaces';
+import { ChainOptions, MarketConfig, ChainConfig, ChainSymbol } from '../util/interfaces';
 import { DEFAULT_CHAIN_OPTIONS } from '../configs/defaultConfig';
 import { Cauldron } from '../contracts/Cauldron';
 import _ = require('underscore');
@@ -49,13 +44,15 @@ export class Abracadabra {
   }
 
   multicall(): EthersMulticall {
-    return new EthersMulticall(
-      this.providerOrSigner() as ethers.providers.Provider
-    );
+    return new EthersMulticall(this.providerOrSigner() as ethers.providers.Provider);
   }
 
   providerOrSigner(): ethers.Signer | ethers.providers.Provider {
-    return this.signer() || this.clientOptions.provider!;
+    return (
+      this.signer() ||
+      this.clientOptions.provider ||
+      new ethers.providers.JsonRpcProvider(this.clientOptions.chain?.defaultRpc)
+    );
   }
 
   marketLens(): string {
