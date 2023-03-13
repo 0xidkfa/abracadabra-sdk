@@ -8,9 +8,11 @@ require('dotenv').config();
 
 const provider = new ethers.providers.JsonRpcProvider(process.env.TENDERLY_TEST_FORK);
 const wallet = new Wallet(process.env.TEST_PRIVATE_KEY!).connect(provider);
-const client = new Abracadabra(ChainSymbol.ethereum, {
+const client = new Abracadabra(ChainSymbol.arbitrum, {
   signer: wallet,
 });
+
+console.log(client);
 
 async function simpleDeposit(market: Market) {
   let cauldron = market.cauldron;

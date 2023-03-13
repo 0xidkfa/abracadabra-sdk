@@ -31,6 +31,10 @@ export class Market {
     return await this.marketLens.getUserPosition(wallet);
   }
 
+  async getUserPositions(wallets: string[]): Promise<Array<UserPosition>> {
+    return await this.marketLens.getUserPositions(wallets);
+  }
+
   async getSignatureCollector(): Promise<SignatureCollector> {
     let bentoBox = await this.cauldron.bentoBox();
     let masterContract = await this.cauldron.masterContract();

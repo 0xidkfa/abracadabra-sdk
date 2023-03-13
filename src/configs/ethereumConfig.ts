@@ -179,5 +179,13 @@ export const ETHEREUM_CHAIN_OPTIONS: AbracadabraConfig = {
         version: 3,
       },
     },
+    magicape: {
+      name: 'magicAPE',
+      cauldron: {
+        contractAddress: '0x692887E8877C6Dd31593cda44c382DB5b289B684',
+        abi: abis.CauldronV4,
+        version: 4,
+      },
+    },
   },
 };

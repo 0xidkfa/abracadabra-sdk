@@ -94,7 +94,7 @@ export class MarketLens extends ContractBase {
     return await this.multicallContract.getUserPosition(this.cauldronAddress, wallet);
   }
 
-  public async getUserPositions(wallet: string): Promise<Array<UserPosition>> {
+  public async getUserPositions(wallet: Array<string>): Promise<Array<UserPosition>> {
     return await this.multicallContract.getUserPositions(this.cauldronAddress, wallet);
   }
 }
