@@ -180,7 +180,15 @@ export const ETHEREUM_CHAIN_OPTIONS: AbracadabraConfig = {
         version: 1,
       },
     },
-    wbtc: {
+    'wbtc-v1': {
+      name: 'WBTC',
+      cauldron: {
+        contractAddress: '0x5ec47EE69BEde0b6C2A2fC0D9d094dF16C192498',
+        abi: abis.CauldronV2,
+        version: 1,
+      },
+    },
+    'wbtc-v2': {
       name: 'WBTC',
       cauldron: {
         contractAddress: '0x85f60D3ea4E86Af43c9D4E9CC9095281fC25c405',

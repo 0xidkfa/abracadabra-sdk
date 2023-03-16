@@ -57,7 +57,7 @@ export interface AmountValue {
 export interface UserPosition {
   ltvBps: BigNumber;
   borrowValue: BigNumber;
-  collateralValue: AmountValue;
+  collateral: AmountValue;
   liquidationPrice: BigNumber;
 }
 
