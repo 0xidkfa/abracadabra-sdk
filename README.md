@@ -16,7 +16,7 @@ This SDK also aims to make it easier for developers to execute actions such as:
 
 # Installation
 
-TODO: You can install the latest version of `abracadabra-sdk` through npm:
+You can install the latest version of `abracadabra-sdk` through npm:
 
 ```
 npm install abracadabra-sdk
@@ -84,7 +84,7 @@ async function simpleDeposit(market: Market) {
 
 # Testing
 
-Tests are done on a Tenderly fork with the block set to 16617737. Test can be run with:
+Tests are done on a Tenderly fork with a fixed block set to 16617737. Test can be run with:
 
 ```
 npm run test
